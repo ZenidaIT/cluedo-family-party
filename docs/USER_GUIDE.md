@@ -21,11 +21,13 @@ Benvenuto in **Cluedo Family Party**, l'app companion per le tue partite a Clued
 
 ### La Griglia
 
-La griglia sostituisce il tuo foglietto degli appunti.
-
-- Clicca una volta su una casella: **Giallo (?)** -> Forse.
-- Clicca due volte: **Verde (V)** -> Ce l'ha lui!
-- Clicca tre volte: **Rosso (X)** -> Non ce l'ha.
+- **Griglia Interattiva**:
+  - **Mobile**: Una pratica tabella scorrevole ti permette di vedere tutti i giocatori con chiarezza.
+  - **Desktop**: La vista si sdoppia! A destra compare il Diario (Log) per prendere appunti senza perdere di vista la griglia.
+- **Celle**: Clicca sulle celle per scorrere gli stati:
+  - 🟨 **Forse** (`?`)
+  - 🟩 **Sì** (`✓`)
+  - 🟥 **No** (`X`)
 - Quarta volta: Pulisce la casella.
 
 ### Diario (Log)
