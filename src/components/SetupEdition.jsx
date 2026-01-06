@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Edit, ChevronRight, X, Save, ArrowLeft, Copy, Globe, Lock } from 'lucide-react';
+import { Plus, Trash2, Edit, ChevronRight, X, Save, ArrowLeft, Copy, Globe, Lock, Book } from 'lucide-react';
 import { collection, addDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import MySwal from '../utils/swal';
@@ -125,7 +125,9 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
             <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
                     {onBack && <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition text-slate-500"><ArrowLeft size={20}/></button>}
-                    <h2 className="font-bold text-lg text-slate-800">Edizioni</h2>
+                    <h2 className="font-bold text-lg text-slate-800 flex items-center gap-2">
+                        <Book size={20} className="text-indigo-500"/> Edizioni
+                    </h2>
                 </div>
                 <button onClick={startCreate} className="bg-slate-900 text-white p-2 rounded-lg hover:bg-slate-700 transition" title="Nuova Edizione">
                     <Plus size={20}/>

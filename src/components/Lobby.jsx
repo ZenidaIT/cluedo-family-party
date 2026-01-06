@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Key, User, Play, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Book, User, Play, Loader2 } from 'lucide-react';
 import logo from '../assets/logo.svg';
 import { collection, addDoc, doc, deleteDoc, query, orderBy, onSnapshot, where } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -154,7 +154,7 @@ const Lobby = ({ user }) => {
                             <User size={20}/> Rubrica
                         </button>
                         <button onClick={() => navigate('/editions')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 hover:text-amber-600 transition shadow-sm border border-slate-200">
-                            <Key size={20}/> Edizioni
+                            <Book size={20}/> Edizioni
                         </button>
                     </div>
                 </div>
