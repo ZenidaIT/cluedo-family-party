@@ -53,7 +53,7 @@ const Lobby = ({ user }) => {
             title: 'Nuova Partita',
             html:
               '<div class="flex flex-col gap-3 mt-2">' +
-              '<input id="swal-sessionname" class="swal2-input m-0 w-full box-border" placeholder="Nome Partita (opzionale)" style="margin:0 !important">' +
+              '<input id="swal-sessionname" class="w-full p-3 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 text-slate-700 bg-slate-50 text-base" placeholder="Nome Partita (opzionale)">' +
               '</div>',
             focusConfirm: false,
             showCancelButton: true,
