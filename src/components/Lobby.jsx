@@ -81,9 +81,9 @@ const Lobby = ({ user }) => {
 
         if (formValues) {
             try {
-                // Initialize default game state with Current User as P1
+                // Initialize default game state with EMPTY players
                 const defaultState = {
-                    players: [{ id: 'p1', name: user.displayName || 'Tu', colorIdx: 0 }],
+                    players: [],
                     gridData: {},
                     historyLog: [],
                     edition: null 

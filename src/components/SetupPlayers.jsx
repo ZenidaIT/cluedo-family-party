@@ -90,11 +90,9 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
               colorIdx: editingColorIdx
            });
            
-           if (!isStandalone) {
-               const updatedSquad = players.map(p => p.originalId === editingId ? { ...p, name: editingName.trim(), colorIdx: editingColorIdx } : p);
-               setPlayers(updatedSquad);
-           }
-
+           // NOTE: We do NOT need to manually update 'players' state here anymore.
+           // The parent component (GamePage) syncs 'gamePlayers' with 'savedPlayers' automatically.
+           
            setEditingId(null);
            setEditingName('');
            setEditingColorIdx(0);
@@ -107,7 +105,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
   const handleDeleteSavedPlayer = async (id) => {
       const result = await Swal.fire({
           title: 'Eliminare?',
-          text: "Rimuovere definitivamente dalla rubrica?",
+          text: "Rimuovere definitivamente dalla rubrica? Verrà rimosso anche dalla partita corrente.",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Elimina',
@@ -126,7 +124,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       if (players.some(p => p.originalId === savedP.id)) return;
       setPlayers([...players, { 
           id: Date.now().toString() + Math.random(), 
-          originalId: savedP.id, 
+          originalId: savedP.id, // CRITICAL: This links to address book
           name: savedP.name, 
           colorIdx: savedP.colorIdx !== undefined ? savedP.colorIdx : (players.length % PLAYER_COLORS.length) 
       }]);

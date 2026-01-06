@@ -103,7 +103,38 @@ const GamePage = () => {
         [sessionId]
     );
 
-    // Watch for changes (skip if loading/error covers it, but effect dependency handles it)
+    // --- SYNC PLAYERS WITH ADDRESS BOOK ---
+    // This ensures changes in Rubrica (Name/Color) propagate to active game
+    useEffect(() => {
+        if (!savedPlayers || savedPlayers.length === 0 || !gamePlayers || gamePlayers.length === 0) return;
+
+        let hasChanges = false;
+        const updatedPlayers = gamePlayers.map(gp => {
+            // Find correspondig saved player by originalId
+            // Note: Older games might lack originalId. 
+            // We could try to match by name as fallback, but originalId is safer.
+            if (!gp.originalId) return gp; 
+
+            const savedP = savedPlayers.find(sp => sp.id === gp.originalId);
+            if (savedP) {
+                // Check if updates needed
+                if (savedP.name !== gp.name || (savedP.colorIdx !== undefined && savedP.colorIdx !== gp.colorIdx)) {
+                    hasChanges = true;
+                    return { ...gp, name: savedP.name, colorIdx: savedP.colorIdx };
+                }
+            }
+            return gp;
+        });
+
+        if (hasChanges) {
+            console.log("Syncing players with Address Book...");
+            setGamePlayers(updatedPlayers);
+            // This will trigger debouncedSave via the existing effect
+        }
+    }, [savedPlayers, gamePlayers]);
+
+
+    // Watch for changes to trigger Save
     useEffect(() => {
         if (loading || error) return;
 
