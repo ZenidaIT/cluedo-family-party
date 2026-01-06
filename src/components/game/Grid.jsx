@@ -12,21 +12,21 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
 
     const getCellIcon = (state) => {
         switch(state) {
-          case CELL_STATES.MAYBE: return <HelpCircle size={14} className="text-amber-600 mx-auto" />;
-          case CELL_STATES.YES: return <Check size={16} className="text-green-600 mx-auto" strokeWidth={4} />;
-          case CELL_STATES.NO: return <X size={14} className="text-red-500 mx-auto opacity-40" strokeWidth={3} />;
-          // Solved state is now just YES in the logic, but keeping fail-safe
-          case CELL_STATES.SOLVED: return <Check size={16} className="text-green-600 mx-auto" strokeWidth={4} />;
+          case CELL_STATES.MAYBE: return <HelpCircle size={14} className="text-amber-700 mx-auto" />;
+          case CELL_STATES.YES: return <Check size={16} className="text-green-700 mx-auto" strokeWidth={4} />;
+          case CELL_STATES.NO: return <X size={14} className="text-red-600 mx-auto" strokeWidth={3} />; 
+          // Solved matches YES
+          case CELL_STATES.SOLVED: return <Check size={16} className="text-green-700 mx-auto" strokeWidth={4} />;
           default: return null;
         }
     };
 
     const getCellClass = (state) => {
         switch(state) {
-            case CELL_STATES.MAYBE: return 'bg-amber-50';
-            case CELL_STATES.YES: return 'bg-green-100 ring-1 ring-inset ring-green-400';
-            case CELL_STATES.NO: return 'bg-red-50';
-            case CELL_STATES.SOLVED: return 'bg-green-100 ring-1 ring-inset ring-green-400';
+            case CELL_STATES.MAYBE: return 'bg-amber-100'; // More intense
+            case CELL_STATES.YES: return 'bg-green-200';   // More intense, No ring
+            case CELL_STATES.NO: return 'bg-red-100';      // More intense
+            case CELL_STATES.SOLVED: return 'bg-green-200'; // Match YES
             default: return '';
         }
     };
@@ -92,7 +92,7 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
                                                 title={item}
                                             >
                                                 <div className="flex items-center justify-between gap-1 overflow-hidden">
-                                                    <span className={`truncate text-[10px] sm:text-xs ${solState === CELL_STATES.NO ? 'line-through decoration-red-500/50 decoration-2 text-slate-400' : ''}`}>{item}</span>
+                                                    <span className="truncate text-[10px] sm:text-xs">{item}</span>
                                                     {/* Optional: mini icon indicator if needed, but background color is usually enough */}
                                                 </div>
                                             </td>
