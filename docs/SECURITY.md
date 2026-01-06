@@ -1,43 +1,61 @@
 # Modello di Sicurezza - Cluedo Family Party
 
-## Filosofia: Zero-Knowledge
+## Panoramica
 
-L'applicazione è progettata secondo il principio **Zero-Knowledge**: né il server (Firebase) né gli amministratori del database possono leggere i dati di gioco.
+L'applicazione si basa su un modello di sicurezza delegata a **Firebase Authentication** e **Firestore Security Rules**. Non gestiamo password proprietarie né crittografia client-side (rimossa nella v1.0).
 
-## Implementazione Tecnica
+## 1. Identità e Accesso (IAM)
 
-### 1. Crittografia Client-Side (AES)
+- **Provider**: Google Sign-In.
+- **Flusso**:
+  - L'utente si autentica con il proprio account Google.
+  - Generiamo un token JWT valido per interagire con le API di Firebase.
+- **Persistenza**: La sessione è mantenuta localmente (persistence: `LOCAL`), l'utente non deve riloggarsi ad ogni reload.
 
-Tutta la logica di gioco risiede nel browser del client. Prima che qualsiasi dato venga inviato al server, viene cifrato utilizzando **AES-256** (tramite la libreria `crypto-js`).
+## 2. Isolamento dei Dati (Database)
 
-- **Chiave**: La password inserita dall'utente in fase di creazione partita.
-- **Payload**: L'intero oggetto di stato JSON (Giocatori, Griglia, Diario).
+I dati sono strutturati in **Firestore** con una rigida separazione per utente (Multi-Tenancy logica).
 
-### 2. Password Effimera
+### Edizioni (Editions)
 
-La password della partita **NON viene mai salvata** su Firebase.
-Esiste solo nella memoria volatile (React State) del client mentre l'utente sta giocando.
-Se la pagina viene ricaricata, l'utente deve reinserire la password per decifrare nuovamente il blob scaricato da Firestore.
+- **Pubbliche** (`public_editions`):
+  - **Lettura**: Aperta a tutti gli utenti autenticati.
+  - **Scrittura**: Riservata agli Admin (email definita in `constants.js`).
+- **Private** (`users/{uid}/editions`):
+  - **Accesso Completo**: Solo l'utente con `request.auth.uid == uid`.
+  - Nessun altro utente può vedere le edizioni personalizzate altrui.
 
-### 3. Firestore (Database)
+### Giocatori (Players)
 
-Firestore agisce come un puro "blob store".
-La collezione `sessions` contiene documenti con la seguente struttura:
+- Path: `users/{uid}/players`.
+- Rubrica personale dell'utente. Invisibile agli altri.
 
-```json
-{
-  "id": "auto-generated-id",
-  "username": "Nome Partita (in chiaro per la Lobby)",
-  "gameData": "U2FsdGVkX1+...", // Stringa cifrata incomprensibile
-  "updatedAt": 1704294000000
-}
-```
+### Partite (Sessions)
 
-### 4. Rischi Residui
+- Path: `users/{uid}/sessions`.
+- Ogni partita salvata è privata dell'utente.
 
-- **Perdita Password**: Se la password viene dimenticata, la partita è **irrecuperabile**. Non esiste procedura di reset.
-- **Accesso Fisico**: Se un attaccante ottiene accesso fisico al dispositivo sbloccato mentre il gioco è aperto, può vedere i dati.
+## 3. Sicurezza Applicativa
 
-## Autenticazione
+### Variabili d'Ambiente (.env)
 
-Utilizziamo **Firebase Anonymous Auth** per limitare le scritture/letture solo agli utenti che hanno caricato l'applicazione dal nostro dominio autorizzato, prevenendo spam bot generici.
+Le chiavi API di Firebase **NON** sono hardcodate nel codice sorgente.
+
+- **Sviluppo**: File `.env.local` (non tracciato da Git).
+- **Produzione**: Variabili iniettate durante la build CI/CD o configurate nell'hosting.
+- **Repo Git**: Contiene solo `.env.example` con i placeholder.
+
+### Protezione Chiavi API
+
+- Le chiavi Firebase esposte nel client ("Browser Key") sono limitate tramite **Google Cloud Console** per accettare richieste solo dai domini autorizzati:
+  - `localhost` (Sviluppo)
+  - `cluedo-family-party.web.app` (Produzione)
+  - `cluedo-family-party.firebaseapp.com` (Produzione)
+
+## 4. Gestione Incidenti
+
+In caso di leak delle chiavi (come avvenuto pre-v1.0):
+
+1.  **Rotazione Immediata**: Rigenerazione chiave su Google Cloud Console.
+2.  **Scrubbing**: Rimozione profonda dalla history di Git (completata).
+3.  **Monitoraggio**: Verifica accessi anomali su Firebase Console.

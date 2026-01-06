@@ -4,16 +4,16 @@
 
 Applicazione **Single Page Application (SPA)** sviluppata con **React** e **Vite**.
 Il backend è **Firebase** (Firestore + Auth).
-La sicurezza dei dati è garantita da **crittografia Client-Side (AES)**.
+L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo che passa da una griglia a scorrimento semplice (Mobile) a una Split View affiancata (Desktop).
 
 ## Stack Tecnologico
 
 - **Frontend**: React (v18), Vite
-- **Stile**: Tailwind CSS
+- **Stile**: Tailwind CSS (Utility-first framework)
 - **Icone**: Lucide React
-- **Asset**: SVG Logo (src/assets/logo.svg)
-- **Feedback UI**: SweetAlert2
-- **Backend**: Firebase (Hosting, Firestore, Auth)
+- **Asset**: SVG nativi
+- **Feedback UI**: SweetAlert2 (Modali e conferme)
+- **Backend**: Firebase (Hosting, Firestore, Auth - Google Provider)
 
 ## Struttura Progetto
 
