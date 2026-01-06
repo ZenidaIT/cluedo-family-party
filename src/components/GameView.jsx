@@ -126,7 +126,7 @@ const GameView = ({
                 
                 {/* LOG SECTION */}
                 <div className={`
-                    lg:w-[400px] lg:border-l lg:border-slate-200 lg:bg-white lg:shadow-xl z-20
+                    lg:w-[35%] xl:w-[30%] lg:border-l lg:border-slate-200 lg:bg-white lg:shadow-xl z-20 max-w-md
                     ${(view === 'LOG') ? 'flex-1 flex flex-col min-h-0' : 'hidden lg:flex flex-col'}
                 `}>
                     <LogView 

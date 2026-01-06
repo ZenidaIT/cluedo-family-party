@@ -12,11 +12,11 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
 
     const getCellIcon = (state) => {
         switch(state) {
-          case CELL_STATES.MAYBE: return <HelpCircle size={14} className="text-amber-700 mx-auto" />;
-          case CELL_STATES.YES: return <Check size={16} className="text-green-700 mx-auto" strokeWidth={4} />;
-          case CELL_STATES.NO: return <X size={14} className="text-red-600 mx-auto" strokeWidth={3} />; 
+          case CELL_STATES.MAYBE: return <HelpCircle className="text-amber-700 mx-auto w-3.5 h-3.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />;
+          case CELL_STATES.YES: return <Check className="text-green-700 mx-auto w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" strokeWidth={4} />;
+          case CELL_STATES.NO: return <X className="text-red-600 mx-auto w-3.5 h-3.5 md:w-5 md:h-5 lg:w-6 lg:h-6" strokeWidth={3} />; 
           // Solved matches YES
-          case CELL_STATES.SOLVED: return <Check size={16} className="text-green-700 mx-auto" strokeWidth={4} />;
+          case CELL_STATES.SOLVED: return <Check className="text-green-700 mx-auto w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" strokeWidth={4} />;
           default: return null;
         }
     };
@@ -32,27 +32,27 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
     };
 
     return (
-        // Main Container: Centered, minimal padding
-        <div className="flex-1 min-h-0 relative flex flex-col items-center bg-slate-100 p-1 lg:p-2 overflow-hidden">
+        // Main Container: Centered, minimal padding mobile, more padding desktop
+        <div className="flex-1 min-h-0 relative flex flex-col items-center bg-slate-100 p-1 md:p-4 lg:p-6 overflow-hidden">
             
             {/* Scroll Wrapper */}
-            <div className="w-full max-w-full overflow-auto pb-24 shadow-sm border rounded bg-white">
-                <table className="border-collapse w-full font-sans text-xs">
+            <div className="w-full max-w-full md:max-w-4xl lg:max-w-6xl overflow-auto pb-24 md:pb-8 shadow-sm border rounded bg-white transition-all duration-300">
+                <table className="border-collapse w-full font-sans text-xs md:text-sm lg:text-base">
                     
                     {/* TABLE HEADER */}
                     <thead className="bg-slate-50 text-slate-700 font-bold sticky top-0 z-40 shadow-sm leading-none">
                         <tr>
                             {/* Empty Corner (was Carte) */}
-                            <th className="bg-slate-50 border-r border-b border-slate-300 min-w-[80px] w-[100px] max-w-[120px] h-8 px-1 text-left align-middle">
+                            <th className="bg-slate-50 border-r border-b border-slate-300 min-w-[80px] w-[100px] max-w-[120px] md:w-[150px] md:max-w-none h-8 md:h-12 px-1 text-left align-middle">
                                 {/* Intentionally Empty */}
                             </th>
 
                             {/* Player Headers */}
                             {gamePlayers.map((p) => (
-                                <th key={p.id} className="min-w-[45px] w-[55px] max-w-[65px] h-8 border-r border-b border-slate-200/50 bg-slate-50 p-0.5 font-normal relative group">
+                                <th key={p.id} className="min-w-[45px] w-[55px] max-w-[65px] md:min-w-[80px] md:w-[100px] md:max-w-none h-8 md:h-12 border-r border-b border-slate-200/50 bg-slate-50 p-0.5 md:p-2 font-normal relative group">
                                     <div className="flex flex-col items-center justify-center h-full overflow-hidden">
-                                        <div className={`w-2 h-2 rounded-full mb-0.5 shrink-0 ${PLAYER_COLORS[p.colorIdx].class}`}></div>
-                                        <span className="text-[9px] font-bold text-slate-700 truncate w-full text-center leading-none px-0.5">{p.name}</span>
+                                        <div className={`w-2 h-2 md:w-3 md:h-3 rounded-full mb-0.5 md:mb-1 shrink-0 ${PLAYER_COLORS[p.colorIdx].class}`}></div>
+                                        <span className="text-[9px] md:text-xs lg:text-sm font-bold text-slate-700 truncate w-full text-center leading-none px-0.5">{p.name}</span>
                                     </div>
                                 </th>
                             ))}
@@ -69,7 +69,7 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
                                 {/* SECTION HEADER ROW */}
                                 <tr className="bg-white">
                                     <td colSpan={1 + gamePlayers.length} className="p-0 border-b border-slate-200">
-                                        <div className={`w-full px-2 py-1 text-[9px] font-bold uppercase tracking-wider text-white ${section.bg}`}>{section.title}</div>
+                                        <div className={`w-full px-2 md:px-4 py-1 md:py-2 text-[9px] md:text-xs font-bold uppercase tracking-wider text-white ${section.bg}`}>{section.title}</div>
                                     </td>
                                 </tr>
 
@@ -83,16 +83,16 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
                                     const nameCellClass = getCellClass(solState);
 
                                     return (
-                                        <tr key={item} className={`h-9 ${rowClass} border-b border-slate-100 last:border-0`}>
+                                        <tr key={item} className={`h-9 md:h-12 lg:h-14 ${rowClass} border-b border-slate-100 last:border-0`}>
                                             
                                             {/* Card Name + Solution Integration */}
                                             <td 
                                                 onClick={() => onCellClick(item, 'SOLUTION')}
-                                                className={`font-semibold text-slate-700 px-2 border-r border-slate-300 truncate cursor-pointer transition-colors active:scale-[0.98] select-none relative ${nameCellClass}`} 
+                                                className={`font-semibold text-slate-700 px-2 md:px-4 border-r border-slate-300 truncate cursor-pointer transition-colors active:scale-[0.98] select-none relative ${nameCellClass}`} 
                                                 title={item}
                                             >
                                                 <div className="flex items-center justify-between gap-1 overflow-hidden">
-                                                    <span className="truncate text-[10px] sm:text-xs">{item}</span>
+                                                    <span className="truncate text-[10px] sm:text-xs md:text-sm lg:text-base">{item}</span>
                                                     {/* Optional: mini icon indicator if needed, but background color is usually enough */}
                                                 </div>
                                             </td>
@@ -102,7 +102,7 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
                                                 <td 
                                                     key={pIdx} 
                                                     onClick={() => onCellClick(item, pIdx)}
-                                                    className={`border-r border-slate-100 cursor-pointer active:scale-95 transition-all text-center p-0 ${getCellClass(gridData[`${item}_${pIdx}`])}`}
+                                                    className={`border-r border-slate-100 cursor-pointer active:scale-95 transition-all text-center p-0 md:p-1 ${getCellClass(gridData[`${item}_${pIdx}`])}`}
                                                 >
                                                     <div className="flex items-center justify-center h-full w-full">
                                                         {getCellIcon(gridData[`${item}_${pIdx}`])}
