@@ -135,74 +135,36 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
   }, [savedPlayers, searchTerm]);
 
   return (
-    <div className="fixed inset-0 bg-slate-100 flex items-center justify-center sm:p-4 z-50">
-        <div className="bg-white w-full h-full sm:h-[90vh] max-w-md sm:rounded-xl shadow-2xl flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-slate-100 flex flex-col items-center p-4">
+        {/* MAIN CONTAINER */}
+        <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[85vh] md:h-[90vh]">
             
-            {/* HEADER */}
-            <div className="bg-slate-900 text-white p-4 flex justify-between items-center shrink-0 shadow-md z-10">
-                <div className="flex items-center gap-3">
-                    <button onClick={onBack} className="p-1 hover:bg-white/10 rounded-full transition"><ArrowLeft size={20}/></button>
-                    <h2 className="text-lg font-bold">{isStandalone ? 'Rubrica Giocatori' : 'Gestione Giocatori'}</h2>
-                </div>
-                {/* Home shortcut if needed */}
-                {onGoHome && isStandalone && ( null )}
-
-                {!isStandalone && (
-                    <button onClick={onStartGame} className="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-1.5 rounded-lg font-bold text-sm shadow transition">
-                        Inizia ({players.length})
-                    </button>
-                )}
-            </div>
-
-            {/* SQUAD SECTION (Only if NOT standalone) */}
-            {!isStandalone && (
-                <div className="bg-indigo-50/50 p-4 border-b border-indigo-100 flex-shrink-0 max-h-[35%] overflow-y-auto">
-                    <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-xs font-bold text-indigo-900 uppercase tracking-wider">La Tua Squadra</h3>
-                        <span className="text-xs text-indigo-400">Trascina per ordinare</span>
+            {/* LEFT PANE: LIBRARY (Rubrica) */}
+            <div className="flex-1 md:w-1/2 lg:w-5/12 border-r border-slate-200 bg-white flex flex-col min-h-0 order-2 md:order-1">
+                {/* Header Left */}
+                <div className="p-4 border-b border-slate-100 flex flex-col gap-3 shrink-0 z-10 bg-white">
+                    <div className="flex items-center justify-between">
+                         <div className="flex items-center gap-3">
+                            <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition text-slate-500 md:hidden"><ArrowLeft size={20}/></button>
+                            <h2 className="font-bold text-lg text-slate-800 flex items-center gap-2">
+                                <User size={20} className="text-indigo-500"/> Rubrica
+                            </h2>
+                         </div>
+                         {/* On Desktop, Back button is in the other pane or global */}
                     </div>
-                    
-                    {players.length === 0 ? (
-                        <div className="text-center py-6 text-indigo-300 border-2 border-dashed border-indigo-200 rounded-lg bg-white/50">
-                            Digita un nome sotto e premi Invio
-                        </div>
-                    ) : (
-                        <div className="space-y-2">
-                            {players.map((p, idx) => (
-                                <div key={p.id} draggable 
-                                    onDragStart={(e) => onDragStart(e, idx)} 
-                                    onDragOver={(e) => e.preventDefault()}
-                                    onDragEnter={(e) => onDragEnter(e, idx)}
-                                    className="flex items-center gap-3 bg-white border border-indigo-100 p-2 rounded-lg shadow-sm cursor-move animate-in zoom-in-95 duration-200">
-                                    <GripVertical className="text-slate-300" size={16}/>
-                                    {/* Small visual fix for white color in squad view too if needed, but constants handles it. No icon inside. */}
-                                    <div className={`w-6 h-6 rounded-full ${PLAYER_COLORS[p.colorIdx]?.class || 'bg-gray-400'} shadow-sm border border-black/5`}></div>
-                                    <span className="font-bold text-slate-700 flex-1 truncate">{p.name}</span>
-                                    <button onClick={() => removeFromSquad(p.id)} className="text-slate-300 hover:text-red-500 p-1">
-                                        <X size={16}/>
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
 
-            {/* LIBRARY SECTION */}
-            <div className="flex-1 flex flex-col min-h-0 bg-white">
-                <div className="p-4 border-b bg-white z-10">
                     <div className="relative">
                         <Search className="absolute left-3 top-3 text-slate-400" size={18}/>
                         <input 
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder={isStandalone ? "Cerca o crea nuovo..." : "Cerca o crea per aggiungere..."}
-                        className="w-full bg-slate-100 border-none rounded-xl pl-10 pr-12 py-3 text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
-                        onKeyDown={e => e.key === 'Enter' && handleAction()}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder={isStandalone ? "Cerca o crea nuovo..." : "Cerca per aggiungere..."}
+                            className="w-full bg-slate-100 border-none rounded-xl pl-10 pr-12 py-3 text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
+                            onKeyDown={e => e.key === 'Enter' && handleAction()}
                         />
                         <button onClick={handleAction} 
                             disabled={!searchTerm.trim()}
-                            className="absolute right-2 top-2 p-1.5 bg-slate-200 text-slate-600 rounded-lg hover:bg-indigo-600 hover:text-white transition disabled:opacity-50">
+                            className="absolute right-2 top-2 p-1.5 bg-white shadow-sm border text-slate-600 rounded-lg hover:bg-indigo-600 hover:text-white transition disabled:opacity-50">
                             {savedPlayers.some(p => p.name.toLowerCase() === searchTerm.trim().toLowerCase()) 
                                 ? (isStandalone ? <Search size={18}/> : <Plus size={18}/>) 
                                 : <Save size={18}/>
@@ -211,10 +173,10 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-2 space-y-1">
+                <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-slate-50">
                     {filteredLibrary.length === 0 && (
-                        <div className="text-center text-slate-400 py-8">
-                            {searchTerm ? 'Premi invio per creare.' : 'Rubrica.'}
+                        <div className="text-center text-slate-400 py-10">
+                            {searchTerm ? 'Premi invio per creare.' : 'Rubrica vuota.'}
                         </div>
                     )}
 
@@ -225,100 +187,149 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                        const playerColorIdx = sp.colorIdx !== undefined ? sp.colorIdx : (sp.id.charCodeAt(0) % PLAYER_COLORS.length);
                        const playerColorClass = PLAYER_COLORS[playerColorIdx]?.class || 'bg-gray-400';
 
-                       return (
-                           <div key={sp.id} className={`flex flex-col p-3 rounded-lg border transition-all ${isEditing ? 'bg-white border-indigo-500 shadow-md z-10' : (isInSquad ? 'bg-indigo-50 border-indigo-100 opacity-80' : 'bg-white hover:border-indigo-300')}`}>
-                               
-                               {/* ROW 1: Main Info */}
-                               <div className="flex items-center justify-between gap-3">
-                                   {isEditing ? (
-                                       <div className="flex-1 flex gap-2">
-                                           <input 
-                                               value={editingName} 
-                                               onChange={e => setEditingName(e.target.value)}
-                                               className="flex-1 border-b-2 border-indigo-500 px-2 py-1 text-lg font-bold outline-none text-slate-800 bg-transparent"
-                                               autoFocus
-                                               placeholder="Nome giocatore"
-                                            />
-                                       </div>
-                                   ) : (
-                                       <div className="flex items-center gap-3 flex-1 group">
-                                           {/* CLICKABLE COLOR CIRCLE FOR EDITING */}
-                                           <button 
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setEditingId(sp.id); 
-                                                    setEditingName(sp.name); 
-                                                    setEditingColorIdx(sp.colorIdx !== undefined ? sp.colorIdx : playerColorIdx); 
-                                                }}
-                                                className={`w-8 h-8 rounded-full ${playerColorClass} transition transform hover:scale-110 flex shrink-0`}
-                                                title="Cambia Colore / Modifica"
-                                           ></button>
-                                           
-                                           {/* NAME CLICK ADDS TO SQUAD */}
-                                           <div className={`flex-1 flex items-center gap-2 cursor-pointer ${isInSquad ? '' : 'hover:translate-x-1 transition'}`} onClick={() => !isInSquad && !isStandalone && addToSquad(sp)}>
-                                                <span className={`font-medium text-lg leading-tight truncate ${isInSquad ? 'text-indigo-700' : 'text-slate-700'}`}>{sp.name}</span>
-                                                {isInSquad && <span className="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide shrink-0">In Gioco</span>}
-                                           </div>
-                                       </div>
-                                   )}
+                       // In Standalone, clicking edits. In Game, clicking adds to squad.
+                       const handleClick = () => {
+                           if (isStandalone) {
+                               setEditingId(sp.id); 
+                               setEditingName(sp.name); 
+                               setEditingColorIdx(sp.colorIdx !== undefined ? sp.colorIdx : playerColorIdx); 
+                           } else {
+                               if (!isInSquad) addToSquad(sp);
+                           }
+                       };
 
-                                   {/* ACTIONS */}
-                                   <div className="flex items-center gap-1">
-                                       {isEditing ? (
-                                           <>
-                                                <button onClick={handleUpdatePlayer} className="p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg shadow"><Check size={18}/></button>
-                                                <button onClick={() => {setEditingId(null); setEditingName(''); setEditingColorIdx(0);}} className="p-2 bg-slate-200 hover:bg-slate-300 text-slate-600 rounded-lg"><X size={18}/></button>
-                                           </>
-                                       ) : (
-                                           <>
-                                                {!isInSquad && !isStandalone && (
-                                                    <button onClick={() => addToSquad(sp)} className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-full">
-                                                        <Plus size={18}/>
-                                                    </button>
-                                                )}
-                                                <button onClick={() => { 
-                                                    setEditingId(sp.id); 
-                                                    setEditingName(sp.name); 
-                                                    setEditingColorIdx(sp.colorIdx !== undefined ? sp.colorIdx : playerColorIdx); 
-                                                }} className="p-2 text-slate-300 hover:text-indigo-500 hover:bg-slate-50 rounded-full">
-                                                    <Pencil size={16}/>
-                                                </button>
-                                                <button onClick={() => handleDeleteSavedPlayer(sp.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full">
-                                                    <Trash2 size={16}/>
-                                                </button>
-                                           </>
-                                       )}
-                                   </div>
+                       return (
+                           <div key={sp.id} 
+                                onClick={handleClick}
+                                className={`flex items-center justify-between p-3 rounded-xl border transition cursor-pointer
+                                    ${isEditing 
+                                        ? 'bg-white border-indigo-500 shadow-md ring-1 ring-indigo-500' 
+                                        : (isInSquad ? 'bg-indigo-50/50 border-indigo-100 opacity-70' : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-sm')
+                                    }
+                                `}
+                            >
+                               <div className="flex items-center gap-3 flex-1 min-w-0">
+                                   <div className={`w-8 h-8 rounded-full ${playerColorClass} shadow-sm border border-white/50 ring-1 ring-slate-200 shrink-0`}></div>
+                                   <span className={`font-bold truncate text-base ${isInSquad ? 'text-indigo-700' : 'text-slate-700'}`}>{sp.name}</span>
                                </div>
 
-                               {/* ROW 2: Color Picker (Only when editing) */}
-                               {isEditing && (
-                                   <div className="mt-4 animate-in slide-in-from-top-2">
-                                       <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Colore</label>
-                                       <div className="flex flex-wrap gap-2">
-                                           {PLAYER_COLORS.map((c, idx) => (
-                                               <button 
-                                                    key={idx}
-                                                    onClick={() => setEditingColorIdx(idx)}
-                                                    className={`w-8 h-8 rounded-full transition hover:scale-110 flex items-center justify-center
-                                                        ${c.class}
-                                                        ${editingColorIdx === idx ? 'scale-125 shadow-xl' : 'opacity-70 hover:opacity-100'}
-                                                    `}
-                                                    title={c.label}
-                                               >
-                                                   {editingColorIdx === idx && <Check size={12} className={idx === 41 ? "text-slate-900" : "text-white drop-shadow-md"}/>} 
-                                                   {/* If color is white (idx 41 approx), make checkmark dark */}
-                                               </button>
-                                           ))}
-                                       </div>
-                                   </div>
-                               )}
+                               <div className="flex items-center gap-1">
+                                    {/* Edit / Delete Actions */}
+                                    <button onClick={(e) => { e.stopPropagation(); 
+                                        setEditingId(sp.id); 
+                                        setEditingName(sp.name); 
+                                        setEditingColorIdx(sp.colorIdx !== undefined ? sp.colorIdx : playerColorIdx); 
+                                    }} className="p-2 text-slate-300 hover:text-indigo-500 hover:bg-indigo-50 rounded-full transition"><Pencil size={16}/></button>
+                               </div>
                            </div>
                        );
                     })}
                 </div>
             </div>
 
+            {/* RIGHT PANE: CONTEXT (Squad or Edit Form) */}
+            <div className="md:w-1/2 lg:w-7/12 bg-white flex flex-col order-1 md:order-2 h-[35vh] md:h-auto border-b md:border-b-0 border-slate-200 shadow-lg md:shadow-none z-20">
+                
+                {/* TOOLBAR */}
+                <div className="p-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
+                    <div className="flex items-center gap-3">
+                         {onBack && <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition text-slate-500 hidden md:block"><ArrowLeft size={20}/></button>}
+                         <h2 className="font-bold text-xl text-slate-800">
+                             {isStandalone ? (editingId ? 'Modifica Giocatore' : 'Dettagli') : 'La Tua Squadra'}
+                         </h2>
+                    </div>
+
+                    {!isStandalone && (
+                        <button onClick={onStartGame} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-indigo-200 transition flex items-center gap-2 animate-in zoom-in">
+                            <Check size={20}/> Inizia ({players.length})
+                        </button>
+                    )}
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-6 bg-slate-50/30 relative">
+                    {isStandalone ? (
+                        /* STANDALONE: EDIT FORM */
+                        editingId ? (
+                            <div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-200 animate-in fade-in slide-in-from-bottom-4">
+                                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nome Giocatore</label>
+                                <input 
+                                   value={editingName} 
+                                   onChange={e => setEditingName(e.target.value)}
+                                   className="w-full text-3xl font-black text-slate-800 border-b-2 border-indigo-100 focus:border-indigo-500 outline-none pb-2 bg-transparent transition"
+                                   autoFocus
+                                   placeholder="Nome..."
+                                />
+
+                                <div className="mt-8">
+                                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Colore Pedina</label>
+                                    <div className="flex flex-wrap gap-3">
+                                        {PLAYER_COLORS.map((c, idx) => (
+                                            <button 
+                                                key={idx}
+                                                onClick={() => setEditingColorIdx(idx)}
+                                                className={`w-10 h-10 rounded-full transition transform hover:scale-110 flex items-center justify-center
+                                                    ${c.class} ring-2 ring-offset-2
+                                                    ${editingColorIdx === idx ? 'ring-indigo-500 scale-110' : 'ring-transparent opacity-60 hover:opacity-100'}
+                                                `}
+                                                title={c.label}
+                                            >
+                                                {editingColorIdx === idx && <Check size={16} className={idx === 41 ? "text-slate-900" : "text-white"} strokeWidth={3}/>} 
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 flex gap-3 pt-6 border-t border-slate-100">
+                                    <button onClick={handleUpdatePlayer} className="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
+                                        Salva Modifiche
+                                    </button>
+                                    <button onClick={() => handleDeleteSavedPlayer(editingId)} className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition border border-transparent hover:border-red-100">
+                                        <Trash2 size={24}/>
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center">
+                                <User size={64} className="mb-4 opacity-10"/>
+                                <p className="text-xl font-medium text-slate-500">Seleziona un giocatore dalla rubrica</p>
+                                <p className="text-sm mt-2">per modificare il nome o il colore.</p>
+                            </div>
+                        )
+                    ) : (
+                        /* GAME MODE: SQUAD LIST */
+                        <div className="space-y-3 max-w-2xl mx-auto">
+                            {players.length === 0 ? (
+                                <div className="text-center py-20 text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
+                                    <UserPlus size={48} className="mx-auto mb-4 opacity-30"/>
+                                    <p className="font-medium text-lg">La tua squadra è vuota.</p>
+                                    <p className="text-sm">Aggiungi giocatori dalla Rubrica a sinistra.</p>
+                                </div>
+                            ) : (
+                                players.map((p, idx) => (
+                                    <div key={p.id} draggable 
+                                        onDragStart={(e) => onDragStart(e, idx)} 
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDragEnter={(e) => onDragEnter(e, idx)}
+                                        className="flex items-center gap-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm cursor-move hover:border-indigo-300 hover:shadow-md transition group animate-in zoom-in-95 duration-200">
+                                        
+                                        <GripVertical className="text-slate-300 group-hover:text-indigo-400" size={20}/>
+                                        
+                                        <div className={`w-10 h-10 rounded-full ${PLAYER_COLORS[p.colorIdx]?.class || 'bg-gray-400'} shadow-md border-2 border-white ring-1 ring-slate-200 flex items-center justify-center font-bold text-white text-xs`}>
+                                            {idx + 1}
+                                        </div>
+                                        
+                                        <span className="font-bold text-slate-800 text-lg flex-1 truncate">{p.name}</span>
+                                        
+                                        <button onClick={() => removeFromSquad(p.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
+                                            <X size={20}/>
+                                        </button>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     </div>
   );

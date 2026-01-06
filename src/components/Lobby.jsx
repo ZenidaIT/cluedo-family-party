@@ -137,64 +137,79 @@ const Lobby = ({ user }) => {
 
     return (
         <div className="min-h-screen bg-slate-100 flex flex-col items-center p-4">
-            <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 animate-in fade-in zoom-in-95 flex flex-col max-h-[90vh] flex-1">
-                <div className="flex flex-col items-center justify-center mb-6 shrink-0 relative">
-                    <img src={logo} alt="Cluedo Family Party" className="h-20 w-auto mb-2"/>
-                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight text-center">Cluedo Family Party</h1>
-                    {loading && <div className="absolute top-0 right-0"><Loader2 className="animate-spin text-slate-400"/></div>}
+            <div className="w-full max-w-7xl animate-in fade-in zoom-in-95 flex flex-col flex-1">
+                
+                {/* HEADER SECTION */}
+                <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
+                    <div className="flex items-center gap-4">
+                        <img src={logo} alt="Cluedo Family Party" className="h-16 w-auto drop-shadow-sm"/>
+                        <div>
+                            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Cluedo Family Party</h1>
+                            <p className="text-slate-500 font-medium text-sm">Investigatore: <span className="text-indigo-600">{user.displayName}</span></p>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                        <button onClick={() => navigate('/players')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm border border-slate-200">
+                            <User size={20}/> Rubrica
+                        </button>
+                        <button onClick={() => navigate('/editions')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 hover:text-amber-600 transition shadow-sm border border-slate-200">
+                            <Key size={20}/> Edizioni
+                        </button>
+                    </div>
                 </div>
 
-                {/* NAVIGATION TOOLBAR */}
-                <div className="grid grid-cols-2 gap-2 mb-6 shrink-0">
-                    <button onClick={() => navigate('/players')} className="flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-50 text-indigo-700 font-bold hover:bg-indigo-100 transition border border-indigo-200">
-                        <User size={20}/> Rubrica
+                {/* MAIN CONTENT AREA */}
+                <div className="flex items-center justify-between mb-4">
+                     <h3 className="font-bold text-slate-500 uppercase text-xs tracking-wider flex items-center gap-2">
+                        Le tue partite <span className="bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full text-[10px]">{sessions.length}</span>
+                     </h3>
+                     {loading && <Loader2 className="animate-spin text-slate-400"/>}
+                </div>
+
+                {/* SESSIONS GRID */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-8">
+                    
+                    {/* NEW GAME CARD */}
+                    <button onClick={handleCreateSession} className="group bg-slate-900 hover:bg-slate-800 text-white rounded-2xl p-6 cursor-pointer transition-all shadow-lg hover:shadow-xl flex flex-col items-center justify-center gap-4 min-h-[160px] border-2 border-transparent hover:border-indigo-500/50">
+                        <div className="bg-white/10 group-hover:bg-white/20 p-4 rounded-full transition-colors">
+                            <Plus size={32}/>
+                        </div>
+                        <span className="font-bold text-lg">Nuova Partita</span>
                     </button>
-                    <button onClick={() => navigate('/editions')} className="flex items-center justify-center gap-2 p-3 rounded-lg bg-amber-50 text-amber-700 font-bold hover:bg-amber-100 transition border border-amber-200">
-                        <Key size={20}/> Edizioni
-                    </button>
-                </div>
 
-                <div className="flex items-center justify-between mb-2">
-                     <h3 className="font-bold text-slate-500 uppercase text-xs tracking-wider">Le tue partite</h3>
-                     <span className="text-xs text-slate-400">{sessions.length} trovate</span>
-                </div>
-
-                <div className="flex-1 overflow-y-auto space-y-3 pr-2 mb-4 min-h-0">
-                    {sessions.length === 0 && !loading && (
-                         <div className="text-center py-10 text-slate-400">
-                             <p className="mb-2">Nessuna partita attiva.</p>
-                             <p className="text-sm">Creane una per iniziare!</p>
-                         </div>
-                    )}
-
+                    {/* SESSION CARDS */}
                     {sessions.map(s => (
                         <div key={s.id} onClick={() => handleJoinSession(s)}
-                            className="group bg-slate-50 hover:bg-white border hover:border-indigo-500 rounded-xl p-3 cursor-pointer transition-all shadow-sm hover:shadow-md flex items-center justify-between gap-3">
+                            className="group bg-white hover:bg-indigo-50/30 border border-slate-200 hover:border-indigo-500 rounded-2xl p-5 cursor-pointer transition-all shadow-sm hover:shadow-md flex flex-col justify-between min-h-[160px] relative overflow-hidden">
                             
-                            <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className="bg-slate-200 text-slate-500 p-2.5 rounded-full shrink-0 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
-                                    <Play size={20} fill="currentColor"/>
+                            <div className="flex justify-between items-start">
+                                <div className="bg-slate-100 text-slate-500 p-3 rounded-xl group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                                    <Play size={24} fill="currentColor"/>
                                 </div>
-                                <div className="min-w-0">
-                                    <div className="font-bold text-slate-800 truncate text-lg leading-tight">{s.username}</div>
-                                    <div className="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
-                                        {new Date(s.updatedAt).toLocaleDateString()} {new Date(s.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                                    </div>
-                                </div>
+                                <button onClick={(e) => handleDeleteSession(e, s.id)} 
+                                    className="p-2 -mr-2 -mt-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition z-10"
+                                    title="Elimina partita">
+                                    <Trash2 size={18}/>
+                                </button>
                             </div>
 
-                            <button onClick={(e) => handleDeleteSession(e, s.id)} 
-                                className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-full transition border border-transparent hover:border-red-100 shrink-0"
-                                title="Elimina partita">
-                                <Trash2 size={18}/>
-                            </button>
+                            <div className="mt-4">
+                                <div className="font-bold text-slate-800 text-xl leading-tight mb-1 truncate">{s.username}</div>
+                                <div className="text-xs text-slate-400 font-medium flex items-center gap-1">
+                                    Ultima modifica: {new Date(s.updatedAt).toLocaleDateString()}
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
 
-                <button onClick={handleCreateSession} className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg flex items-center justify-center gap-2 shrink-0">
-                    <Plus/> Nuova Partita
-                </button>
+                {sessions.length === 0 && !loading && (
+                     <div className="text-center py-10 text-slate-400 col-span-full">
+                         <p className="mb-2">Nessuna partita attiva.</p>
+                         <p className="text-sm">Inizia una nuova indagine!</p>
+                     </div>
+                )}
             </div>
         </div>
     );
