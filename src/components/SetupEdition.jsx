@@ -160,17 +160,17 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
                                 {ed.isPublic ? <Globe size={14} className="text-indigo-400"/> : <Lock size={14} className="text-slate-400"/>}
                             </div>
                             
-                            <div className="text-xs text-slate-500 flex flex-wrap gap-1">
-                                <span className="bg-slate-100 px-1.5 py-0.5 rounded">{ed.suspects?.length || 0} S</span>
-                                <span className="bg-slate-100 px-1.5 py-0.5 rounded">{ed.weapons?.length || 0} A</span>
-                                <span className="bg-slate-100 px-1.5 py-0.5 rounded">{ed.rooms?.length || 0} L</span>
+                            <div className="text-xs text-slate-500 flex flex-wrap gap-1 mt-1">
+                                <span className="bg-slate-100 px-2 py-1 rounded">Sospettati: <b>{ed.suspects?.length || 0}</b></span>
+                                <span className="bg-slate-100 px-2 py-1 rounded">Armi: <b>{ed.weapons?.length || 0}</b></span>
+                                <span className="bg-slate-100 px-2 py-1 rounded">Luoghi: <b>{ed.rooms?.length || 0}</b></span>
                             </div>
 
                             {(canEdit || ed.isPublic) && (
-                                <div className="border-t border-slate-100 pt-2 flex justify-end gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                     {/* Buttons logic same as before but smaller */}
-                                     {canEdit && <button onClick={(e) => handleDelete(e, ed)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded"><Trash2 size={16}/></button>}
-                                     {ed.isPublic && <button onClick={(e) => startClone(e, ed)} className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded"><Copy size={16}/></button>}
+                                <div className="border-t border-slate-100 pt-2 flex justify-end gap-1 mt-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                     {/* Buttons logic same as before but always visible on mobile */}
+                                     {canEdit && <button onClick={(e) => handleDelete(e, ed)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded"><Trash2 size={18}/></button>}
+                                     {ed.isPublic && <button onClick={(e) => startClone(e, ed)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded"><Copy size={18}/></button>}
                                 </div>
                             )}
                         </div>

@@ -136,11 +136,13 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col items-center p-4">
+
         {/* MAIN CONTAINER */}
         <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[85vh] md:h-[90vh]">
             
             {/* LEFT PANE: LIBRARY (Rubrica) */}
-            <div className="flex-1 md:w-1/2 lg:w-5/12 border-r border-slate-200 bg-white flex flex-col min-h-0 order-2 md:order-1">
+            {/* Show on Mobile if NOT editing (or editingId is null), OR always show on Desktop */}
+            <div className={`flex-1 md:w-1/2 lg:w-5/12 border-r border-slate-200 bg-white flex-col min-h-0 ${isStandalone && editingId && 'hidden md:flex'} ${!isStandalone && 'flex'}`}>
                 {/* Header Left */}
                 <div className="p-4 border-b border-slate-100 flex flex-col gap-3 shrink-0 z-10 bg-white">
                     <div className="flex items-center justify-between">
@@ -150,7 +152,6 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                                 <User size={20} className="text-indigo-500"/> Rubrica
                             </h2>
                          </div>
-                         {/* On Desktop, Back button is in the other pane or global */}
                     </div>
 
                     <div className="relative">
@@ -187,7 +188,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                        const playerColorIdx = sp.colorIdx !== undefined ? sp.colorIdx : (sp.id.charCodeAt(0) % PLAYER_COLORS.length);
                        const playerColorClass = PLAYER_COLORS[playerColorIdx]?.class || 'bg-gray-400';
 
-                       // In Standalone, clicking edits. In Game, clicking adds to squad.
+                       // In Standalone, clicking edits (Switches view on mobile via state). 
                        const handleClick = () => {
                            if (isStandalone) {
                                setEditingId(sp.id); 
@@ -214,7 +215,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                                </div>
 
                                <div className="flex items-center gap-1">
-                                    {/* Edit / Delete Actions */}
+                                    {/* Edit button always visible */}
                                     <button onClick={(e) => { e.stopPropagation(); 
                                         setEditingId(sp.id); 
                                         setEditingName(sp.name); 
@@ -228,11 +229,31 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
             </div>
 
             {/* RIGHT PANE: CONTEXT (Squad or Edit Form) */}
-            <div className="md:w-1/2 lg:w-7/12 bg-white flex flex-col order-1 md:order-2 h-[35vh] md:h-auto border-b md:border-b-0 border-slate-200 shadow-lg md:shadow-none z-20">
+            {/* Mobile: Show ONLY if editingId (Standalone) OR always show if Game Mode (Bottom Panel) -- Wait, user said restore "List First".
+                In Standalone: List is Page 1. Editor is Page 2.
+                So if isStandalone:
+                    Mobile: Show Right Pane ONLY if editingId.
+                    Desktop: Always show Right Pane.
+                In Game Mode:
+                    Mobile: Split View vertical? Or switch tabs?
+                    Current code was: Split View vertical (List Top, Squad Bottom).
+                    User complaint was about "Rubrica" (Standalone) being cramped.
+                    So I will focus on fixing Standalone Rubrica.
+            */}
+            <div className={`md:w-1/2 lg:w-7/12 bg-white flex-col h-[35vh] md:h-auto border-b md:border-b-0 border-slate-200 shadow-lg md:shadow-none z-20 md:flex
+                ${isStandalone 
+                    ? (editingId ? 'flex fixed inset-0 z-50 h-full' : 'hidden md:flex md:static') // Standalone Mobile: Fullscreen Overlay if editing
+                    : 'flex order-1 md:order-2' // Game Mode Mobile: Keep displayed (maybe sticky bottom?)
+                }
+            `}>
                 
                 {/* TOOLBAR */}
                 <div className="p-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
                     <div className="flex items-center gap-3">
+                         {/* Mobile Back Button for Standalone Editor */}
+                         {isStandalone && editingId && (
+                             <button onClick={() => setEditingId(null)} className="md:hidden p-2 hover:bg-slate-100 rounded-full transition text-slate-500"><ArrowLeft size={20}/></button>
+                         )}
 
                          <h2 className="font-bold text-xl text-slate-800">
                              {isStandalone ? (editingId ? 'Modifica Giocatore' : 'Dettagli') : 'La Tua Squadra'}
