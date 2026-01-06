@@ -233,7 +233,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                 {/* TOOLBAR */}
                 <div className="p-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
                     <div className="flex items-center gap-3">
-                         {onBack && <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition text-slate-500 hidden md:block"><ArrowLeft size={20}/></button>}
+
                          <h2 className="font-bold text-xl text-slate-800">
                              {isStandalone ? (editingId ? 'Modifica Giocatore' : 'Dettagli') : 'La Tua Squadra'}
                          </h2>
