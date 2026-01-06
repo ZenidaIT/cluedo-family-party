@@ -241,7 +241,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                                             />
                                        </div>
                                    ) : (
-                                       <div className="flex items-center gap-3 flex-1 overflow-hidden group">
+                                       <div className="flex items-center gap-3 flex-1 group">
                                            {/* CLICKABLE COLOR CIRCLE FOR EDITING */}
                                            <button 
                                                 onClick={(e) => {
@@ -250,14 +250,14 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                                                     setEditingName(sp.name); 
                                                     setEditingColorIdx(sp.colorIdx !== undefined ? sp.colorIdx : playerColorIdx); 
                                                 }}
-                                                className={`w-8 h-8 rounded-full shadow-inner ${playerColorClass} border-2 border-white/50 ring-1 ring-slate-200 transition transform hover:scale-110 flex shrink-0`}
+                                                className={`w-8 h-8 rounded-full ${playerColorClass} transition transform hover:scale-110 flex shrink-0`}
                                                 title="Cambia Colore / Modifica"
                                            ></button>
                                            
                                            {/* NAME CLICK ADDS TO SQUAD */}
-                                           <div className="flex-1 truncate flex items-center gap-2 cursor-pointer" onClick={() => !isInSquad && !isStandalone && addToSquad(sp)}>
-                                                <span className={`font-medium text-lg leading-tight ${isInSquad ? 'text-indigo-700' : 'text-slate-700'}`}>{sp.name}</span>
-                                                {isInSquad && <span className="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">In Gioco</span>}
+                                           <div className={`flex-1 flex items-center gap-2 cursor-pointer ${isInSquad ? '' : 'hover:translate-x-1 transition'}`} onClick={() => !isInSquad && !isStandalone && addToSquad(sp)}>
+                                                <span className={`font-medium text-lg leading-tight truncate ${isInSquad ? 'text-indigo-700' : 'text-slate-700'}`}>{sp.name}</span>
+                                                {isInSquad && <span className="text-[10px] bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide shrink-0">In Gioco</span>}
                                            </div>
                                        </div>
                                    )}
@@ -300,13 +300,11 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                                                <button 
                                                     key={idx}
                                                     onClick={() => setEditingColorIdx(idx)}
-                                                    className={`w-8 h-8 rounded-full border-2 transition hover:scale-110 flex items-center justify-center
+                                                    className={`w-8 h-8 rounded-full transition hover:scale-110 flex items-center justify-center
                                                         ${c.class}
-                                                        ${editingColorIdx === idx ? 'border-slate-800 ring-2 ring-slate-300 scale-110 shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'}
+                                                        ${editingColorIdx === idx ? 'scale-125 shadow-xl' : 'opacity-70 hover:opacity-100'}
                                                     `}
                                                     title={c.label}
-                                                    // Ensure white has visibility: The class from constants includes border-slate-300 for white.
-                                                    // That should be enough, but we can enforce local override if needed? No, constants is cleaner.
                                                >
                                                    {editingColorIdx === idx && <Check size={12} className={idx === 41 ? "text-slate-900" : "text-white drop-shadow-md"}/>} 
                                                    {/* If color is white (idx 41 approx), make checkmark dark */}
