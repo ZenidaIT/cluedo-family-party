@@ -6,27 +6,28 @@ description: Regole fondamentali del progetto Cluedo Family Party per futuri age
 
 1.  **Fase 0: Leggere la Documentazione**
 
-    - Prima di modificare qualsiasi codice, LEGGERE `docs/ARCHITECTURE.md`.
-    - Comprendere che l'app usa **Client-Side Encryption**. Modificare la struttura dati senza considerare questo romperà i salvataggi esistenti.
+    - Prima di modificare codice, LEGGERE `docs/ARCHITECTURE.md` e `docs/USER_GUIDE.md`.
+    - La cartella `docs/` è l'unica fonte di verità.
 
 2.  **Stack Tecnologico Vincolante**
 
-    - React + Vite (Non create-react-app).
-    - Tailwind CSS (Vanilla utility classes, niente librerie UI pesanti tranne SweetAlert2 per i popup).
-    - Lucide React (Unico set di icone ammesso).
+    - **React + Vite**.
+    - **Tailwind CSS** (Utility-first, design system coerente Slate/Indigo).
+    - **Lucide React** (Unico set di icone).
+    - **Table-based Layout**: Per la griglia di gioco (`Grid.jsx`) usare sempre `<table>` nativa.
 
-3.  **UX Guidelines**
+3.  **Security First**
 
-    - **Premium Feel**: Colori vivaci, ombre (shadow-lg), bordi arrotondati (rounded-xl).
-    - **Mobile First**: Tutto deve essere raggiungibile col pollice. Liste scrollabili, bottoni fissi in basso.
+    - **Credenziali**: Mai committare chiavi API. Usare sempre `.env`.
+    - **Git**: `.gitignore` deve escludere `.env.local` e `dist/`.
+    - **Zero-Trust**: Non fidarsi del client, ma delegare la sicurezza a Firestore Rules (Server-side).
+
+4.  **UX Guidelines**
+
+    - **Mobile First**: L'interfaccia deve funzionare perfettamente su schermi stretti (scroll semplificato).
     - **No Alert/Confirm**: Usare ESCLUSIVAMENTE `SweetAlert2` (`Swal.fire`).
-
-4.  **Sicurezza**
-
-    - Mai salvare dati di gioco in chiaro su Firestore.
-    - Mai rimuovere la logica AES in `Lobby.jsx` o `App.jsx`.
+    - **Sticky Elements**: Usare `position: sticky` con saggezza (i contenitori `overflow` possono romperlo).
 
 5.  **Workflow Aggiornamenti**
-    - **Documentazione sempre aggiornata**: Dopo OGNI modifica al codice (funzionalità, UI, struttura), aggiornare i file in `docs/` per riflettere lo stato attuale.
-    - Se si modifica la struttura dello stack tecnologico, aggiornare `docs/ARCHITECTURE.md`.
-    - Testare sempre il build (`npm run build`) prima del deploy.
+    - **Documentazione Viva**: Aggiornare `docs/TODO.md` e `docs/USER_GUIDE.md` parallelamente al codice.
+    - **Deployment**: Eseguire sempre la build (`npm run build`) prima del deploy.
