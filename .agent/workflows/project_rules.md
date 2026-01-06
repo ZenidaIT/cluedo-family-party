@@ -6,7 +6,7 @@ description: Regole fondamentali del progetto Cluedo Family Party per futuri age
 
 1.  **Fase 0: Leggere la Documentazione**
 
-    - Prima di modificare codice, LEGGERE `docs/ARCHITECTURE.md` e `docs/USER_GUIDE.md`.
+    - Prima di modificare codice, LEGGERE `docs/ARCHITECTURE.md`, `docs/USER_GUIDE.md` e `docs/TODO.md`.
     - La cartella `docs/` è l'unica fonte di verità.
 
 2.  **Stack Tecnologico Vincolante**
