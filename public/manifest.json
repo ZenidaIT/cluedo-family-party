@@ -11,13 +11,13 @@
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
-      "sizes": "192x192 512x512"
+      "sizes": "any"
     },
     {
-      "src": "/favicon.svg",
+      "src": "/logo.svg",
       "type": "image/svg+xml",
       "sizes": "any",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ]
 }
