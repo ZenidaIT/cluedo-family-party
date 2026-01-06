@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { auth, db } from './firebase';
@@ -7,9 +7,18 @@ import { Routes, Route, Outlet, useNavigate, Navigate } from 'react-router-dom';
 // Components / Pages
 import Login from './components/Login';
 import Lobby from './components/Lobby';
-import SetupEdition from './components/SetupEdition';
-import SetupPlayers from './components/SetupPlayers';
-import GamePage from './pages/GamePage';
+
+// Lazy Load heavy components
+const SetupEdition = React.lazy(() => import('./components/SetupEdition'));
+const SetupPlayers = React.lazy(() => import('./components/SetupPlayers'));
+const GamePage = React.lazy(() => import('./pages/GamePage'));
+
+// Loading Fallback
+const PageLoader = () => (
+  <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+  </div>
+);
 
 function App() {
   const [user, setUser] = useState(null);
@@ -79,40 +88,48 @@ function App() {
     <Routes>
         <Route element={<Outlet context={{ user, privateEditions, publicEditions, savedPlayers }} />}>
             
-            {/* LOBBY */}
+            {/* LOBBY (Eager) */}
             <Route path="/" element={
                  <Lobby 
                     user={user} 
                  /> 
             } />
             
-            {/* GAME SESSION */}
-            <Route path="/game/:sessionId" element={<GamePage />} />
+            {/* GAME SESSION (Lazy) */}
+            <Route path="/game/:sessionId" element={
+                <Suspense fallback={<PageLoader />}>
+                    <GamePage />
+                </Suspense>
+            } />
 
-            {/* MANAGERS (Standalone) */}
+            {/* MANAGERS (Standalone - Lazy) */}
             <Route path="/editions" element={
-                <SetupEdition 
-                    isStandalone={true}
-                    user={user}
-                    privateEditions={privateEditions}
-                    publicEditions={publicEditions}
-                    onSelectEdition={() => {}}
-                    onBack={() => navigate('/')} 
-                    onGoHome={() => navigate('/')}
-                />
+                <Suspense fallback={<PageLoader />}>
+                    <SetupEdition 
+                        isStandalone={true}
+                        user={user}
+                        privateEditions={privateEditions}
+                        publicEditions={publicEditions}
+                        onSelectEdition={() => {}}
+                        onBack={() => navigate('/')} 
+                        onGoHome={() => navigate('/')}
+                    />
+                </Suspense>
             } />
             
             <Route path="/players" element={
-                <SetupPlayers 
-                    isStandalone={true}
-                    savedPlayers={savedPlayers}
-                    players={[]}
-                    setPlayers={() => {}}
-                    user={user}
-                    onBack={() => navigate('/')} 
-                    onStartGame={() => {}}
-                    onGoHome={() => navigate('/')}
-                />
+                <Suspense fallback={<PageLoader />}>
+                    <SetupPlayers 
+                        isStandalone={true}
+                        savedPlayers={savedPlayers}
+                        players={[]}
+                        setPlayers={() => {}}
+                        user={user}
+                        onBack={() => navigate('/')} 
+                        onStartGame={() => {}}
+                        onGoHome={() => navigate('/')}
+                    />
+                </Suspense>
             } />
             
             {/* Fallback */}
