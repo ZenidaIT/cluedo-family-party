@@ -47,6 +47,8 @@ function App() {
             const qPlayers = query(collection(db, 'artifacts', 'default-app-id', 'users', u.uid, 'players'), orderBy('name', 'asc'));
             const unsubPlayers = onSnapshot(qPlayers, (snapshot) => {
                 const players = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                // Enforce proper alphabetical sort (case-insensitive)
+                players.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
                 setSavedPlayers(players);
             });
 
