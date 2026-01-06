@@ -4,6 +4,7 @@ import logo from '../assets/logo.svg';
 import { collection, addDoc, doc, deleteDoc, query, orderBy, onSnapshot, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import MySwal from '../utils/swal';
+import { useNavigate } from 'react-router-dom';
 
 const Lobby = ({ user }) => {
     const navigate = useNavigate();
