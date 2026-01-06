@@ -8,6 +8,14 @@ Benvenuto in **Cluedo Family Party**, l'app companion per le tue partite a Clued
 2.  Nella **Lobby**, vedrai le tue partite recenti (o una lista vuota se sei nuovo).
 3.  Clicca **(+) Nuova Partita**.
 
+## Installazione (PWA)
+
+Puoi installare Cluedo Family Party come un'app nativa sul tuo telefono o computer:
+
+- **Android/Chrome**: Clicca su "Installa App" nel menu del browser.
+- **iOS (Safari)**: Clicca su "Condividi" -> "Aggiungi alla Schermata Home".
+  L'app funzionerà a schermo intero e sarà accessibile anche con connessione instabile.
+
 ## Setup e Preparazione
 
 1.  **Edizione**: Scegli "Cluedo Classico" o crea/seleziona una tua edizione personalizzata.
@@ -21,14 +29,14 @@ Benvenuto in **Cluedo Family Party**, l'app companion per le tue partite a Clued
 
 ### La Griglia
 
-- **Griglia Interattiva**:
-  - **Mobile**: Una pratica tabella scorrevole ti permette di vedere tutti i giocatori con chiarezza.
-  - **Desktop**: La vista si sdoppia! A destra compare il Diario (Log) per prendere appunti senza perdere di vista la griglia.
-- **Celle**: Clicca sulle celle per scorrere gli stati:
-  - 🟨 **Forse** (`?`)
-  - 🟩 **Sì** (`✓`)
-  - 🟥 **No** (`X`)
-- Quarta volta: Pulisce la casella.
+- **Layout Mobile Ottimizzato**:
+  - La griglia è compatta per mostrare fino a 5 giocatori senza scorrere.
+  - **Nomi Carte**: Clicca direttamente sul **nome della carta** per segnare se tu ce l'hai o l'hai trovata nella busta (diventerà Verde). Non esiste più una colonna "Soluzione" separata.
+  - **Celle Giocatori**: Clicca sulle celle per scorrere gli stati:
+    - 🟩 **Sì** (`✓`) - Ha la carta
+    - 🟨 **Forse** (`?`) - Potrebbe averla
+    - 🟥 **No** (`X`) - Non ce l'ha (passa o mostra altro)
+    - Quarta volta: Pulisce la casella.
 
 ### Diario (Log)
 

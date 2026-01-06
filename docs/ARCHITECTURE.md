@@ -2,13 +2,14 @@
 
 ## Overview
 
-Applicazione **Single Page Application (SPA)** sviluppata con **React** e **Vite**.
+Applicazione **Progressive Web App (PWA)** sviluppata con **React** e **Vite**.
 Il backend è **Firebase** (Firestore + Auth).
-L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo che passa da una griglia a scorrimento semplice (Mobile) a una Split View affiancata (Desktop).
+L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo che passa da una griglia compatta (Mobile) a una Split View affiancata (Desktop). È installabile su dispositivi mobili e funziona offline (cache-first per asset statici).
 
 ## Stack Tecnologico
 
 - **Frontend**: React (v18), Vite
+- **PWA**: `vite-plugin-pwa` (Service Worker, Manifest, Installabilità)
 - **Stile**: Tailwind CSS (Utility-first framework)
 - **Icone**: Lucide React
 - **Asset**: SVG nativi
@@ -18,20 +19,28 @@ L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo
 ## Struttura Progetto
 
 - `src/main.jsx`: Punto d'ingresso React.
-- `src/App.jsx`: Gestore di stato globale, Logica Sessione, Auto-Save Debounced.
+- `src/App.jsx`: Gestore di stato globale, Logica Sessione, Auto-Save Debounced, Lazy Loading rotte.
 - `src/assets/`:
-  - `logo.svg`: Logo ufficiale (Tracciato nero, sfondo trasparente).
+  - `logo.svg`: Logo ufficiale.
 - `src/components/`
-  - `Lobby.jsx`: Entry point. Lista partite recenti per l'utente loggato.
+  - `Lobby.jsx`: Entry point. Lista partite recenti.
   - `SetupEdition.jsx`: Gestione Edizioni (Pubbliche/Private).
   - `SetupPlayers.jsx`: Rubrica Giocatori persistente e selezione squadra.
   - `GameView.jsx`: Layout principale partita (Header + Grid + Log).
-  - `game/Grid.jsx`: La griglia interattiva.
+  - `game/Grid.jsx`: La griglia interattiva ottimizzata mobile.
   - `game/LogView.jsx`: Il diario delle ipotesi.
-  - `Modal.jsx`: Componente base per i dialoghi.
-  - `Login.jsx`: Gestione autenticazione Google.
+- `src/utils/swal.js`: Configurazione centralizzata SweetAlert2 (Responsive).
 - `src/constants.js`: Configurazioni (Colori, Admin Email).
 - `src/firebase.js`: Configurazione e provider Google.
+
+## Performance & Ottimizzazioni
+
+1.  **Code Splitting**:
+    - Le rotte principali (`GamePage`, `SetupEdition`, `SetupPlayers`) sono caricate in **Lazy Loading** con `React.Suspense`.
+    - **Vendor Chunking**: Le librerie pesanti (Firebase, React) sono separate in chunk dedicati (`firebase`, `vendor`) per ottimizzare il caching.
+2.  **PWA**:
+    - Service Worker configurato per caching aggressivo degli asset statici.
+    - Manifest per installazione come app nativa.
 
 ## Flusso Dati & Sicurezza
 
@@ -39,9 +48,11 @@ L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo
 2.  **Data Isolation**:
     - Le "Rubriche" e i salvataggi sono isolati per utente nel path `users/{uid}/`.
     - Le regole di sicurezza Firestore (`firestore.rules`) garantiscono che ogni utente possa leggere/scrivere solo i propri dati.
-3.  **Edizioni**:
+3.  **Sync & Conflict Resolution**:
+    - **Auto-Save**: Debounce (1s) su ogni modifica.
+    - **Loop Breaker**: Un flag `isRemoteUpdate` previene il "ping-pong" dei salvataggi (Echo Save) quando due dispositivi sono sincronizzati sulla stessa partita. Gli aggiornamenti ricevuti da remoto non innescano un auto-save locale.
+4.  **Edizioni**:
     - Gli utenti vedono le edizioni pubbliche (gestite dall'Admin) e le proprie private.
-4.  **Auto-Save**: Debounce (1s) su ogni modifica della griglia che aggiorna il documento della partita su Firestore.
 
 ## Deploy
 

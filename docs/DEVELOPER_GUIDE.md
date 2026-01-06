@@ -46,9 +46,9 @@ Questa guida è pensata per nuovi sviluppatori (o agenti AI) che devono configur
 
 ## Comandi Disponibili
 
-- `npm run dev`: Avvia Vite in modalità dev (hot reload).
+- `npm run dev`: Avvia Vite in modalità dev (hot reload). Nota: il Service Worker PWA potrebbe non essere attivo in dev standard.
 - `npm run build`: Compila il progetto per produzione nella cartella `dist/`.
-- `npm run preview`: Avvia un server locale per testare la build di produzione.
+- `npm run preview`: Avvia un server locale per testare la build di produzione (utile per testare PWA offline).
 - `firebase deploy`: Pubblica la cartella `dist/` su Firebase Hosting.
 
 ## Workflow di Sviluppo
