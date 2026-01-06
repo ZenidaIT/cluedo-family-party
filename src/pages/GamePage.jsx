@@ -178,16 +178,13 @@ const GamePage = () => {
         const currentState = gridData[key] || CELL_STATES.EMPTY;
     
         let nextState;
-        if (playerIdx === 'SOLUTION') {
-            if (currentState === CELL_STATES.EMPTY) nextState = CELL_STATES.SOLVED;
-            else if (currentState === CELL_STATES.SOLVED) nextState = CELL_STATES.MAYBE;
-            else nextState = CELL_STATES.EMPTY;
-        } else {
-            if (currentState === CELL_STATES.EMPTY) nextState = CELL_STATES.MAYBE;
-            else if (currentState === CELL_STATES.MAYBE) nextState = CELL_STATES.YES;
-            else if (currentState === CELL_STATES.YES) nextState = CELL_STATES.NO;
-            else nextState = CELL_STATES.EMPTY;
-        }
+        // Unified Logic: Empty -> Yes (Green) -> Maybe (Yellow) -> No (Red) -> Empty
+        // This applies to both Players and Solution (which is just another column logically now)
+        if (currentState === CELL_STATES.EMPTY) nextState = CELL_STATES.YES;
+        else if (currentState === CELL_STATES.YES) nextState = CELL_STATES.MAYBE;
+        else if (currentState === CELL_STATES.MAYBE) nextState = CELL_STATES.NO;
+        else nextState = CELL_STATES.EMPTY;
+        
         setGridData(prev => ({ ...prev, [key]: nextState }));
     };
 
