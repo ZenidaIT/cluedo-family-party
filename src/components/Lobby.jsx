@@ -5,7 +5,11 @@ import { collection, addDoc, doc, deleteDoc, query, orderBy, onSnapshot, where }
 import { db } from '../firebase';
 import Swal from 'sweetalert2';
 
-const Lobby = ({ onJoinSession, user, onManageEditions, onManagePlayers }) => {
+import { useNavigate } from 'react-router-dom';
+
+const Lobby = ({ user }) => {
+    const navigate = useNavigate();
+    
     // Mobile-friendly Swal Mixin
     const MobileSwal = Swal.mixin({
         customClass: {
@@ -102,7 +106,7 @@ const Lobby = ({ onJoinSession, user, onManageEditions, onManagePlayers }) => {
                     showConfirmButton: false
                 });
 
-                onJoinSession(docRef.id, null, defaultState);
+                navigate(`/game/${docRef.id}`);
 
             } catch (error) {
                 console.error(error);
@@ -111,24 +115,8 @@ const Lobby = ({ onJoinSession, user, onManageEditions, onManagePlayers }) => {
         }
     };
 
-    const handleJoinSession = async (session) => {
-        try {
-            let gameState;
-            try {
-                gameState = JSON.parse(session.gameData);
-            } catch (e) {
-                console.error("Parse error", e);
-                throw new Error("Dati partita non validi.");
-            }
-            onJoinSession(session.id, null, gameState);
-
-        } catch (e) {
-            MobileSwal.fire({
-                icon: 'error',
-                title: 'Errore',
-                text: 'Impossibile caricare partita: ' + e.message,
-            });
-        }
+    const handleJoinSession = (session) => {
+        navigate(`/game/${session.id}`);
     };
 
     const handleDeleteSession = async (e, id) => {
@@ -171,10 +159,10 @@ const Lobby = ({ onJoinSession, user, onManageEditions, onManagePlayers }) => {
 
                 {/* NAVIGATION TOOLBAR */}
                 <div className="grid grid-cols-2 gap-2 mb-6 shrink-0">
-                    <button onClick={onManagePlayers} className="flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-50 text-indigo-700 font-bold hover:bg-indigo-100 transition border border-indigo-200">
+                    <button onClick={() => navigate('/players')} className="flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-50 text-indigo-700 font-bold hover:bg-indigo-100 transition border border-indigo-200">
                         <User size={20}/> Rubrica
                     </button>
-                    <button onClick={onManageEditions} className="flex items-center justify-center gap-2 p-3 rounded-lg bg-amber-50 text-amber-700 font-bold hover:bg-amber-100 transition border border-amber-200">
+                    <button onClick={() => navigate('/editions')} className="flex items-center justify-center gap-2 p-3 rounded-lg bg-amber-50 text-amber-700 font-bold hover:bg-amber-100 transition border border-amber-200">
                         <Key size={20}/> Edizioni
                     </button>
                 </div>
