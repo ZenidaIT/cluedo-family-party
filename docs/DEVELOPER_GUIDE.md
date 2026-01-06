@@ -58,6 +58,18 @@ Questa guida è pensata per nuovi sviluppatori (o agenti AI) che devono configur
 3.  **Commit Type**: Usa messaggi descrittivi ("Feat: ...", "Fix: ...", "Docs: ...").
 4.  **Test**: Verifica sempre il layout su **Mobile** (Chrome DevTools Device Mode) e **Desktop**.
 
+## Componenti Chiave
+
+- **`Lobby.jsx`**: Home page. Gestisce la lista delle sessioni e la creazione di nuove partite.
+- **`SetupPlayers.jsx`**: Gestione Rubrica e Squadra.
+  - _Desktop_: Split View (Lista a sinistra, Dettagli a destra).
+  - _Mobile_: Lista di default. Editor a tutto schermo on-click.
+- **`SetupEdition.jsx`**: Gestione Edizioni (Sospettati, Armi, Luoghi).
+  - _Desktop_: Split View.
+  - _Mobile_: Lista e Editor separati.
+- **`GamePage.jsx`**: Il core dell'app. Gestisce lo stato della partita, la griglia e il log.
+- **`Grid.jsx`**: La tabella di gioco. Implementa la logica di deduzione visuale.
+
 ## Deployment
 
 Il deploy è manuale (per ora) tramite CLI Firebase.

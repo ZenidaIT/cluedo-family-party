@@ -18,11 +18,14 @@ Puoi installare Cluedo Family Party come un'app nativa sul tuo telefono o comput
 
 ## Setup e Preparazione
 
-1.  **Edizione**: Scegli "Cluedo Classico" o crea/seleziona una tua edizione personalizzata.
-2.  **Giocatori**:
-    - **Rubrica**: Qui trovi i tuoi giocatori salvati. Cerca o crea nuovi giocatori.
-    - **Squadra**: Seleziona i giocatori dalla rubrica per aggiungerli alla partita corrente ("In Gioco").
-    - **Colori**: Puoi modificare il colore di un giocatore cliccando sul pallino colorato.
+1.  **Edizione (Icona Libro 📘)**:
+    - **Desktop**: Layout a due colonne. A sinistra la lista, a destra i dettagli modifica.
+    - **Mobile**: Lista edizioni. Clicca su un'edizione per vedere i dettagli e modificarla.
+2.  **Giocatori (Icona Utente 👤)**:
+    - **Rubrica**: Qui gestisci i tuoi contatti.
+      - **Desktop**: Lista a sinistra, dettagli a destra.
+      - **Mobile**: Lista prima. Clicca su un contatto per aprire la scheda modifica a tutto schermo.
+    - **Squadra**: Seleziona i giocatori dalla rubrica per aggiungerli alla partita corrente.
 3.  Clicca **"Inizia Partita"**.
 
 ## Durante il Gioco
@@ -31,7 +34,7 @@ Puoi installare Cluedo Family Party come un'app nativa sul tuo telefono o comput
 
 - **Layout Mobile Ottimizzato**:
   - La griglia è compatta per mostrare fino a 5 giocatori senza scorrere.
-  - **Nomi Carte**: Clicca direttamente sul **nome della carta** per segnare se tu ce l'hai o l'hai trovata nella busta (diventerà Verde). Non esiste più una colonna "Soluzione" separata.
+  - **Nomi Carte**: Clicca direttamente sul **nome della carta** per segnare se tu ce l'hai o l'hai trovata nella busta (diventerà Verde).
   - **Celle Giocatori**: Clicca sulle celle per scorrere gli stati:
     - 🟩 **Sì** (`✓`) - Ha la carta
     - 🟨 **Forse** (`?`) - Potrebbe averla
@@ -55,5 +58,6 @@ Poiché sei loggato con il tuo account, ritroverai sempre le tue partite nella L
 ## Icone e Simboli
 
 - **Logo Cluedo**: Nella home page e in alto durante la partita.
-- **Lente d'ingrandimento**: Il simbolo della tua indagine.
-- **Lucchetto/Chiave**: Indica che la partita è protetta.
+- **Libro (📘)**: Gestione Edizioni.
+- **Omino (👤)**: Gestione Rubrica.
+- **Lucchetto**: Indica che una partita o un'edizione è privata/protetta.
