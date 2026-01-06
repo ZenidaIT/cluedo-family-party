@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
+import { useParams, useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { CELL_STATES } from '../constants';
@@ -13,6 +13,7 @@ import GameView from '../components/GameView';
 const GamePage = () => {
     const { sessionId } = useParams();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const { user, privateEditions, publicEditions, savedPlayers } = useOutletContext();
 
     const [loading, setLoading] = useState(true);
@@ -25,13 +26,24 @@ const GamePage = () => {
     const [gridData, setGridData] = useState({});
     const [historyLog, setHistoryLog] = useState([]);
     
-    // Derived UI State (Wizard Step)
-    // STEP 1: Edition Selection -> If currentEdition is null
-    // STEP 2: Player Selection -> If currentEdition is set but we are explicitly in setup mode? 
-    // actually, we can infer: if gamePlayers length is 1 (default) OR we track a "status" field.
-    // simpler: Let's use a local 'viewMode' state that defaults based on data presence, 
-    // but can be toggled (e.g. going back to edit players).
-    const [viewMode, setViewMode] = useState('LOADING'); 
+    // Derived UI State
+    const stepParam = searchParams.get('step');
+    let viewMode = 'LOADING';
+
+    if (!loading && !error) {
+        if (stepParam === 'setup_edition') {
+            viewMode = 'SETUP_EDITION';
+        } else if (stepParam === 'setup_players') {
+            viewMode = 'SETUP_PLAYERS';
+        } else if (currentEdition && stepParam === 'game') {
+             viewMode = 'GAME';
+        } else {
+            // Heuristic (Default behavior)
+            if (!currentEdition) viewMode = 'SETUP_EDITION';
+            else if (!gamePlayers || gamePlayers.length <= 1) viewMode = 'SETUP_PLAYERS';
+            else viewMode = 'GAME';
+        }
+    }
 
     // --- LOAD SESSION ---
     useEffect(() => {
@@ -44,26 +56,10 @@ const GamePage = () => {
                 try {
                     const gameState = JSON.parse(data.gameData);
                     
-                    // Only update state if it originates from external change or initial load
-                    // To prevent loop with autosave, we could compare timestamps or use a ref mechanism.
-                    // For now, simple set. React won't re-render if strict equality holds, but objects differ.
-                    // Ideally we should sync carefully. 
-                    // However, for this simplicity: we TRUST the DB source of truth on load.
-                    // But if we are typing, we don't want DB to overwrite us instantly if latency.
-                    // Since specific conflicts are rare in a single-user-write scenario (my session):
-                    // We can just load it.
-
-                    // Determine View Mode on initial load or if not set
-                    if (viewMode === 'LOADING') {
-                        if (!gameState.edition) setViewMode('SETUP_EDITION');
-                        else if (!gameState.players || gameState.players.length <= 1) setViewMode('SETUP_PLAYERS'); // Heuristic
-                        else setViewMode('GAME');
-                        
-                        setCurrentEdition(gameState.edition);
-                        setGamePlayers(gameState.players || []);
-                        setGridData(gameState.gridData || {});
-                        setHistoryLog(gameState.historyLog || []);
-                    }
+                    setCurrentEdition(gameState.edition);
+                    setGamePlayers(gameState.players || []);
+                    setGridData(gameState.gridData || {});
+                    setHistoryLog(gameState.historyLog || []);
                     setLoading(false);
 
                 } catch (e) {
@@ -81,7 +77,7 @@ const GamePage = () => {
         });
 
         return () => unsub();
-    }, [sessionId, user]); // Run only on ID change
+    }, [sessionId, user]);
 
     // --- AUTO SAVE ---
     const saveGameToFirestore = async (state) => {
@@ -103,13 +99,13 @@ const GamePage = () => {
     const debouncedSave = useCallback(
         _.debounce((newState) => {
             saveGameToFirestore(newState);
-        }, 1000), // 1s debounce
+        }, 1000), 
         [sessionId]
     );
 
-    // Watch for changes to trigger Save
+    // Watch for changes (skip if loading/error covers it, but effect dependency handles it)
     useEffect(() => {
-        if (loading || error || viewMode === 'LOADING') return;
+        if (loading || error) return;
 
         const currentState = {
             edition: currentEdition,
@@ -125,8 +121,8 @@ const GamePage = () => {
 
     const handleSelectEdition = (edition) => {
         setCurrentEdition(edition);
-        setViewMode('SETUP_PLAYERS');
-        // Immediate save to persist step
+        setSearchParams({ step: 'setup_players' });
+        // Immediate save
         saveGameToFirestore({
             edition: edition,
             players: gamePlayers,
@@ -136,7 +132,7 @@ const GamePage = () => {
     };
 
     const handleStartGame = () => {
-        setViewMode('GAME');
+        setSearchParams({ step: 'game' });
         // Immediate save
         saveGameToFirestore({
             edition: currentEdition,
@@ -206,7 +202,7 @@ const GamePage = () => {
                 user={user}
                 privateEditions={privateEditions}
                 publicEditions={publicEditions}
-                gameHistory={[]} // Removed legacy feature
+                gameHistory={[]} 
                 onLoadGame={() => {}}
                 onBack={() => navigate('/')}
                 onGoHome={() => navigate('/')}
@@ -221,13 +217,14 @@ const GamePage = () => {
                 setPlayers={setGamePlayers} 
                 savedPlayers={savedPlayers}
                 user={user}
-                onBack={() => setViewMode('SETUP_EDITION')}
+                onBack={() => setSearchParams({ step: 'setup_edition' })}
                 onStartGame={handleStartGame}
                 onGoHome={() => navigate('/')}
             />
         );
     }
 
+    // Default: GAME
     return (
         <GameView 
             currentEdition={currentEdition}
@@ -247,6 +244,8 @@ const GamePage = () => {
                     if(r.isConfirmed) {
                         setGridData({});
                         setHistoryLog([]);
+                        // Reset to setup edition if desired, or just clear data
+                        // If clear data, stay in Game
                     }
                 });
             }}
@@ -270,7 +269,7 @@ const GamePage = () => {
                     if (r.isConfirmed) navigate('/');
                 })
             }}
-            onEditPlayers={() => setViewMode('SETUP_PLAYERS')}
+            onEditPlayers={() => setSearchParams({ step: 'setup_players' })}
         />
     );
 };
