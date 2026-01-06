@@ -145,7 +145,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                 <div className="p-4 border-b border-slate-100 flex flex-col gap-3 shrink-0 z-10 bg-white">
                     <div className="flex items-center justify-between">
                          <div className="flex items-center gap-3">
-                            <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition text-slate-500 md:hidden"><ArrowLeft size={20}/></button>
+                            <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition text-slate-500"><ArrowLeft size={20}/></button>
                             <h2 className="font-bold text-lg text-slate-800 flex items-center gap-2">
                                 <User size={20} className="text-indigo-500"/> Rubrica
                             </h2>
