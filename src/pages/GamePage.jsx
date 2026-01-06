@@ -3,7 +3,7 @@ import { useParams, useNavigate, useOutletContext, useSearchParams } from 'react
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { CELL_STATES } from '../constants';
-import Swal from 'sweetalert2';
+import MySwal from '../utils/swal';
 import _ from 'lodash';
 
 import SetupEdition from '../components/SetupEdition';
@@ -193,7 +193,7 @@ const GamePage = () => {
 
     const handleLogEntry = (entry, editId, isDelete = false) => {
         if (isDelete) {
-            Swal.fire({
+            MySwal.fire({
                 title: 'Eliminare questa ipotesi?',
                 icon: 'warning',
                 showCancelButton: true,
@@ -265,7 +265,7 @@ const GamePage = () => {
             onCellClick={handleCellClick}
             onLogEntry={handleLogEntry}
             onNewMatch={() => {
-                Swal.fire({
+                MySwal.fire({
                     title: 'Nuova Partita?',
                     text: "Svuoto la griglia e il diario.", 
                     icon: 'warning',
@@ -286,11 +286,11 @@ const GamePage = () => {
                     players: gamePlayers,
                     gridData: gridData,
                     historyLog: historyLog
-                }).then(() => Swal.fire('Salvato', '', 'success'));
+                }).then(() => MySwal.fire('Salvato', '', 'success'));
             }}
             onLoadHistory={() => {}}
             onReturnHome={() => {
-                Swal.fire({
+                MySwal.fire({
                     title: 'Tornare alla Lobby?',
                     text: 'La partita è salvata.',
                     icon: 'question',

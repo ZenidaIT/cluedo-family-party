@@ -3,26 +3,12 @@ import { Plus, Trash2, Key, User, Play, Loader2 } from 'lucide-react';
 import logo from '../assets/logo.svg';
 import { collection, addDoc, doc, deleteDoc, query, orderBy, onSnapshot, where } from 'firebase/firestore';
 import { db } from '../firebase';
-import Swal from 'sweetalert2';
-
-import { useNavigate } from 'react-router-dom';
+import MySwal from '../utils/swal';
 
 const Lobby = ({ user }) => {
     const navigate = useNavigate();
     
-    // Mobile-friendly Swal Mixin
-    const MobileSwal = Swal.mixin({
-        customClass: {
-            popup: 'rounded-xl shadow-xl border border-slate-100',
-            confirmButton: 'bg-slate-900 text-white px-6 py-3 rounded-lg font-bold shadow-lg hover:bg-slate-800',
-            cancelButton: 'bg-white text-slate-500 px-4 py-3 rounded-lg font-bold border hover:bg-slate-50',
-            actions: 'gap-3',
-            input: 'rounded-lg border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500' 
-        },
-        buttonsStyling: false,
-        width: '90%',
-        maxWidth: '400px'
-    });
+    // Removed local MobileSwal definition in favor of centralized utility
 
     const [sessions, setSessions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -45,14 +31,14 @@ const Lobby = ({ user }) => {
             // Check for missing index error
             if (err.message.includes("indexes?create_composite=")) {
                 const link = err.message.match(/https:\/\/console\.firebase\.google\.com[^\s]*/)[0];
-                MobileSwal.fire({
+                MySwal.fire({
                     title: 'Indice Mancante',
                     html: `Il database richiede un indice per funzionare.<br><br><a href="${link}" target="_blank" style="color:blue;text-decoration:underline;">CLICCA QUI PER CREARLO</a>`,
                     icon: 'warning',
                     confirmButtonText: 'Chiudi'
                 });
             } else {
-                MobileSwal.fire({
+                MySwal.fire({
                     title: 'Errore Database',
                     text: err.message,
                     icon: 'error'
@@ -63,7 +49,7 @@ const Lobby = ({ user }) => {
     }, [user]);
 
     const handleCreateSession = async () => {
-        const { value: formValues } = await MobileSwal.fire({
+        const { value: formValues } = await MySwal.fire({
             title: 'Nuova Partita',
             html:
               '<div class="flex flex-col gap-3 mt-2">' +
@@ -99,7 +85,7 @@ const Lobby = ({ user }) => {
                     updatedAt: Date.now()
                 });
                 
-                await MobileSwal.fire({
+                await MySwal.fire({
                     icon: 'success',
                     title: 'Partita Creata!',
                     timer: 1000,
@@ -110,7 +96,7 @@ const Lobby = ({ user }) => {
 
             } catch (error) {
                 console.error(error);
-                MobileSwal.fire('Errore', 'Impossibile creare: ' + error.message, 'error');
+                MySwal.fire('Errore', 'Impossibile creare: ' + error.message, 'error');
             }
         }
     };
@@ -121,7 +107,7 @@ const Lobby = ({ user }) => {
 
     const handleDeleteSession = async (e, id) => {
         e.stopPropagation();
-        const result = await MobileSwal.fire({
+        const result = await MySwal.fire({
             title: 'Eliminare?',
             text: "Non potrai più recuperare questa partita.",
             icon: 'warning',
@@ -138,7 +124,7 @@ const Lobby = ({ user }) => {
 
         if (result.isConfirmed) {
             await deleteDoc(doc(db, 'sessions', id));
-            MobileSwal.fire({
+            MySwal.fire({
                 icon: 'success',
                 title: 'Eliminata',
                 timer: 1500,

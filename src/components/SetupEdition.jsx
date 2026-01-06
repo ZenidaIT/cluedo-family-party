@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Edit, ChevronRight, X, Save, ArrowLeft, Copy, Globe, Lock } from 'lucide-react';
 import { collection, addDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import Swal from 'sweetalert2';
+import MySwal from '../utils/swal';
 import { ADMIN_EMAIL } from '../constants'; 
 
 const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditions = [], onBack, onGoHome }) => {
@@ -41,7 +41,7 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
     e.stopPropagation();
     
     // Use SweetAlert for consistency
-    const result = await Swal.fire({
+    const result = await MySwal.fire({
         title: 'Eliminare Edizione?',
         text: "Questa azione non è reversibile.",
         icon: 'warning',
@@ -61,18 +61,18 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
             // Deleting from the correct collection
             await deleteDoc(doc(db, collectionPath, edition.id));
             
-            Swal.fire('Eliminata!', '', 'success');
+            MySwal.fire('Eliminata!', '', 'success');
         } catch (error) {
             console.error("Delete error:", error);
-            Swal.fire('Errore', error.message, 'error');
+            MySwal.fire('Errore', error.message, 'error');
         }
     }
   };
 
   const handleSave = async () => {
-    if (!formData.name) return Swal.fire('Attenzione', "Inserisci un nome per l'edizione.", 'warning');
+    if (!formData.name) return MySwal.fire('Attenzione', "Inserisci un nome per l'edizione.", 'warning');
     if (formData.suspects.length < 2 || formData.weapons.length < 2 || formData.rooms.length < 2) {
-        return Swal.fire('Attenzione', "Inserisci almeno 2 elementi per categoria.", 'warning');
+        return MySwal.fire('Attenzione', "Inserisci almeno 2 elementi per categoria.", 'warning');
     }
 
     try {
@@ -93,11 +93,11 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
 
              await updateDoc(docRef, formData);
         }
-        Swal.fire({ icon: 'success', title: 'Salvato!', timer: 1500, showConfirmButton: false });
+        MySwal.fire({ icon: 'success', title: 'Salvato!', timer: 1500, showConfirmButton: false });
         setEditingId(null);
     } catch (error) {
         console.error("Error saving edition:", error);
-        Swal.fire('Errore', error.message, 'error');
+        MySwal.fire('Errore', error.message, 'error');
     }
   };
 

@@ -3,7 +3,7 @@ import { ArrowLeft, GripVertical, Trash2, Plus, UserPlus, Save, Check, Search, X
 import { PLAYER_COLORS } from '../constants';
 import { addDoc, collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import Swal from 'sweetalert2';
+import MySwal from '../utils/swal';
 
 const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers = [], user, isStandalone = false, onGoHome }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,7 +43,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       const existing = savedPlayers.find(p => p.name.toLowerCase() === trimmedTerm.toLowerCase());
 
       if (existing) {
-          Swal.fire('Attenzione', `${existing.name} è già presente in rubrica. Scegli un nome univoco.`, 'warning');
+          MySwal.fire('Attenzione', `${existing.name} è già presente in rubrica. Scegli un nome univoco.`, 'warning');
       } else {
           // If NOT existing, CREATE NEW
           try {
@@ -58,7 +58,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
                   addToSquad({ id: docRef.id, name: trimmedTerm, colorIdx: newColorIdx });
               }
               setSearchTerm(''); // Clear input
-              Swal.fire({
+              MySwal.fire({
                   icon: 'success',
                   title: 'Creato',
                   text: `${trimmedTerm} aggiunto alla rubrica!`,
@@ -70,7 +70,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
 
           } catch (e) {
               console.error(e);
-              Swal.fire('Errore', e.message, 'error');
+              MySwal.fire('Errore', e.message, 'error');
           }
       }
   };
@@ -81,7 +81,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       // Check for duplicates (excluding self)
       const duplicate = savedPlayers.find(p => p.name.toLowerCase() === editingName.trim().toLowerCase() && p.id !== editingId);
       if (duplicate) {
-          return Swal.fire('Attenzione', `Il nome ${duplicate.name} è già in uso. Scegline uno univoco.`, 'warning');
+          return MySwal.fire('Attenzione', `Il nome ${duplicate.name} è già in uso. Scegline uno univoco.`, 'warning');
       }
 
       try {
@@ -98,12 +98,12 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
            setEditingColorIdx(0);
       } catch (e) {
           console.error(e);
-          Swal.fire('Errore', e.message, 'error');
+          MySwal.fire('Errore', e.message, 'error');
       }
   };
 
   const handleDeleteSavedPlayer = async (id) => {
-      const result = await Swal.fire({
+      const result = await MySwal.fire({
           title: 'Eliminare?',
           text: "Rimuovere definitivamente dalla rubrica? Verrà rimosso anche dalla partita corrente.",
           icon: 'warning',
