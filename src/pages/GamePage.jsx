@@ -45,6 +45,8 @@ const GamePage = () => {
         }
     }
 
+    const isRemoteUpdate = React.useRef(false);
+
     // --- LOAD SESSION ---
     useEffect(() => {
         if (!sessionId || !user) return;
@@ -56,6 +58,9 @@ const GamePage = () => {
                 try {
                     const gameState = JSON.parse(data.gameData);
                     
+                    // Flag this as a remote update to prevent echo-saving
+                    isRemoteUpdate.current = true;
+
                     setCurrentEdition(gameState.edition);
                     setGamePlayers(gameState.players || []);
                     setGridData(gameState.gridData || {});
@@ -137,6 +142,12 @@ const GamePage = () => {
     // Watch for changes to trigger Save
     useEffect(() => {
         if (loading || error) return;
+
+        // Loop Breaker: If this change came from Firestore, DO NOT save it back.
+        if (isRemoteUpdate.current) {
+            isRemoteUpdate.current = false;
+            return;
+        }
 
         const currentState = {
             edition: currentEdition,

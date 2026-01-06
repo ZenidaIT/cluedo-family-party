@@ -16,3 +16,6 @@
 ## 🎨 UI/UX Generale
 
 - [ ] Due interfacce distinte per Mobile e Desktop (non solo resize, ma differente layout logico).
+- [ ] Nella rubrica dobbiamo bordare i colori della palette con un colore a contrasto (ad esempio il bianco non si vede)
+- [ ] Nella rubrica dobbiamo scegliere una palette di colori che comprenda tutti i colori necessari per cluedo
+- [ ] Nella rubrica il pallino colore viene tagliato un po' specie al passaggio del mouse
