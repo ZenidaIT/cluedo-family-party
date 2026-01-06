@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { signInAnonymously, onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, onSnapshot, addDoc, query, orderBy, updateDoc, doc } from "firebase/firestore";
+import { collection, onSnapshot, addDoc, query, orderBy, updateDoc, doc, getDoc } from "firebase/firestore";
 import { auth, db } from './firebase';
 import { CLASSIC_EDITION, CELL_STATES } from './constants';
 import Lobby from './components/Lobby';
@@ -35,14 +35,53 @@ function App() {
   
   // --- INIT & AUTH ---
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
+    const unsubscribe = onAuthStateChanged(auth, async (u) => {
         // Log output for debugging purposes
         console.log("Auth State Changed:", u ? `User ${u.uid} isAnonymous=${u.isAnonymous}` : "No User");
         
         setUser(u);
-        setAuthLoading(false);
-
+        
         if (u) {
+            // Restore Session if available in LocalStorage
+            const lastSessionId = localStorage.getItem('cluedo_lastSessionId');
+            const lastMode = localStorage.getItem('cluedo_lastMode');
+
+            if (lastSessionId && lastMode) { // Logic: if we have history, try to restore
+                try {
+                    const sessionDoc = await getDoc(doc(db, 'sessions', lastSessionId));
+                    if (sessionDoc.exists()) {
+                         const sessionData = sessionDoc.data();
+                         // Verify ownership (optional but good)
+                         if(sessionData.ownerId === u.uid) {
+                             const gameState = JSON.parse(sessionData.gameData);
+                             
+                             // Restore State
+                             setSessionId(lastSessionId);
+                             setCurrentEdition(gameState.edition);
+                             setGamePlayers(gameState.players || []);
+                             setGridData(gameState.gridData || {});
+                             setHistoryLog(gameState.historyLog || []);
+                             setMode(lastMode);
+                             console.log("Session Restored:", lastSessionId, "Mode:", lastMode);
+                         } else {
+                             // Session exists but not yours (shouldn't happen with private storage but safe to clear)
+                             localStorage.removeItem('cluedo_lastSessionId');
+                             localStorage.removeItem('cluedo_lastMode');
+                         }
+                    } else {
+                        // Session deleted remotely
+                        localStorage.removeItem('cluedo_lastSessionId');
+                        localStorage.removeItem('cluedo_lastMode');
+                    }
+                } catch (e) {
+                    console.error("Restoration Failed:", e);
+                    localStorage.removeItem('cluedo_lastSessionId');
+                    localStorage.removeItem('cluedo_lastMode');
+                }
+            }
+
+            setAuthLoading(false); // Only unset loading after restoration attempt is done
+
             // Subscribe to Private Editions
             const qPrivate = query(collection(db, 'artifacts', 'default-app-id', 'users', u.uid, 'editions'), orderBy('createdAt', 'desc'));
             const unsubPrivate = onSnapshot(qPrivate, (snapshot) => {
@@ -73,6 +112,8 @@ function App() {
                 unsubPublic();
                 unsubPlayers();
             };
+        } else {
+            setAuthLoading(false);
         }
     });
     return () => unsubscribe();
@@ -109,6 +150,10 @@ function App() {
   // Watch for changes
   useEffect(() => {
       if (mode === 'LOBBY' || !sessionId) return;
+      
+      // Persist to LocalStorage for Reload Resiliency
+      localStorage.setItem('cluedo_lastSessionId', sessionId);
+      localStorage.setItem('cluedo_lastMode', mode);
       
       const currentState = {
           edition: currentEdition,
@@ -148,6 +193,10 @@ function App() {
       setGridData({});
       setHistoryLog([]);
       setMode('LOBBY');
+      
+      // Clear Persistence
+      localStorage.removeItem('cluedo_lastSessionId');
+      localStorage.removeItem('cluedo_lastMode');
   };
 
   // --- GAME VIEW ACTIONS ---
