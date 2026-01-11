@@ -150,7 +150,7 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
 
                     return (
                         <div key={ed.id} 
-                            onClick={(e) => startEdit(e, ed)}
+                            onClick={() => onSelectEdition(ed)}
                             className={`p-4 rounded-xl border transition group cursor-pointer flex flex-col gap-2
                                 ${isActive ? 'bg-white border-indigo-500 shadow-md ring-1 ring-indigo-500' : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-sm'}
                             `}
@@ -169,8 +169,9 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
                             {(canEdit || ed.isPublic) && (
                                 <div className="border-t border-slate-100 pt-2 flex justify-end gap-1 mt-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                                      {/* Buttons logic same as before but always visible on mobile */}
-                                     {canEdit && <button onClick={(e) => handleDelete(e, ed)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded"><Trash2 size={18}/></button>}
-                                     {ed.isPublic && <button onClick={(e) => startClone(e, ed)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded"><Copy size={18}/></button>}
+                                     {canEdit && <button onClick={(e) => startEdit(e, ed)} className="p-2 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 rounded" title="Modifica"><Edit size={18}/></button>}
+                                     {canEdit && <button onClick={(e) => handleDelete(e, ed)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded" title="Elimina"><Trash2 size={18}/></button>}
+                                     {ed.isPublic && <button onClick={(e) => startClone(e, ed)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded" title="Clona"><Copy size={18}/></button>}
                                 </div>
                             )}
                         </div>

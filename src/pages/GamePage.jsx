@@ -163,7 +163,7 @@ const GamePage = () => {
 
     const handleSelectEdition = (edition) => {
         setCurrentEdition(edition);
-        setSearchParams({ step: 'setup_players' });
+        setSearchParams({ step: 'setup_players', from: 'setup_edition' });
         // Immediate save
         saveGameToFirestore({
             edition: edition,
@@ -256,7 +256,11 @@ const GamePage = () => {
                 setPlayers={setGamePlayers} 
                 savedPlayers={savedPlayers}
                 user={user}
-                onBack={() => setSearchParams({ step: 'setup_edition' })}
+                onBack={() => {
+                    const from = searchParams.get('from');
+                    if (from === 'game') setSearchParams({ step: 'game' });
+                    else setSearchParams({ step: 'setup_edition' });
+                }}
                 onStartGame={handleStartGame}
                 onGoHome={() => navigate('/')}
             />
@@ -308,7 +312,7 @@ const GamePage = () => {
                     if (r.isConfirmed) navigate('/');
                 })
             }}
-            onEditPlayers={() => setSearchParams({ step: 'setup_players' })}
+            onEditPlayers={() => setSearchParams({ step: 'setup_players', from: 'game' })}
         />
     );
 };
