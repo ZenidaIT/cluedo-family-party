@@ -8,7 +8,7 @@ import { ADMIN_EMAIL } from '../constants';
 import SetupEditionDesktop from './setup-edition/SetupEditionDesktop';
 import SetupEditionMobile from './setup-edition/SetupEditionMobile';
 
-const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditions = [], onBack, onGoHome }) => {
+const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditions = [], onBack, onGoHome, isSelectionMode = false }) => {
   const [editingId, setEditingId] = useState(null); 
   const [formData, setFormData] = useState({ name: '', suspects: [], weapons: [], rooms: [], isPublic: false });
   
@@ -115,7 +115,7 @@ const SetupEdition = ({ onSelectEdition, user, privateEditions = [], publicEditi
   };
 
   const viewProps = {
-      onSelectEdition, user, privateEditions, publicEditions, onBack, onGoHome, isAdmin,
+      onSelectEdition, user, privateEditions, publicEditions, onBack, onGoHome, isAdmin, isSelectionMode,
       editingId, setEditingId,
       startCreate, startEdit, startClone, handleDelete, handleSave,
       formData, setFormData,

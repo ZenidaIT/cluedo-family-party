@@ -107,6 +107,7 @@ function App() {
                 <Suspense fallback={<PageLoader />}>
                     <SetupEdition 
                         isStandalone={true}
+                        isSelectionMode={false}
                         user={user}
                         privateEditions={privateEditions}
                         publicEditions={publicEditions}

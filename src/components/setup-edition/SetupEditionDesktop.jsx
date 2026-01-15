@@ -10,6 +10,7 @@ const SetupEditionDesktop = ({
     publicEditions,
     onBack,
     isAdmin, // computed in container
+    isSelectionMode,
     
     // Logic/State
     editingId,
@@ -32,74 +33,11 @@ const SetupEditionDesktop = ({
     removeItem
 }) => {
     
-    const allEditions = [...publicEditions, ...privateEditions];
-    const isEditing = !!editingId;
-    // Context Detection: If onSelectEdition is passed, we are likely in Game Selection mode.
-    // If it's undefined (or dummy), we are in Manager mode.
-    // Actually, onSelectEdition is ALWAYS passed in SetupEdition container props.
-    // We need to check if we are in GamePage or elsewhere.
-    // Let's assume onSelectEdition logic is: if it selects for game, it does something.
-    // But in the container:
-    // SetupEdition is used in GamePage (viewMode=SETUP_EDITION). onSelectEdition calls handleSelectEdition.
-    // SetupEdition is used in ??? (Maybe HomePage).
-    // Let's use a prop `isSelectionMode`. If not passed, we infer.
-    // Wait, the User says "In Modalità Modifica non serve a nulla, in Nuova Partita deve selezionare".
-    // So distinct behaviors.
-    // Implementation: simple. Click -> onSelectEdition(ed).
-    // If onSelectEdition is provided, it triggers logic. 
-    // The container `SetupEdition` passes `onSelectEdition`.
-    // In `GamePage` -> `handleSelectEdition` -> Sets edition, goes to next step.
-    // In `HomePage` (if we add it) -> ???
-    
-    // NOTE: Current SetupEdition Container ALWAYS passes `onSelectEdition`.
-    // If we are just managing, maybe we should pass `isManagementMode` prop?
-    // Let's look at `SetupEdition.jsx` container.
-    // It accepts `onSelectEdition`.
-    // BUT the user feedback implies we are in a context where "New Game > Select" happens.
-    // And another context "Gestione Edizioni"?
-    // Currently, `SetupEdition` IS the manager.
-    // If we use it for SELECTION, `onSelectEdition` changes the game state.
-    // If we use it for EDITING, what does `onSelectEdition` do?
-    // In `GamePage`: it sets currentEdition.
-    
-    // User Request 2: "In modalità nuova partita... il click deve selezionare".
-    // User Request 3: "In modalità modifica... tasto usa non serve".
-    // I will assume that if we are editing (Manager), we don't want to select to play.
-    // But both use the same component currently.
-    // FIX: The component logic should be:
-    // CLICK on card:
-    // - If we are in "Game Selection Step": Selects.
-    // - If we are in "Manager Mode": Opens Edit.
-    
-    // How to distinguish?
-    // I'll add a prop `mode` to SetupEditionDesktop, default to 'select' if onSelectEdition is real?
-    // Let's assume explicit prop `isSelectionMode` passed from Container.
-    // Container doesn't know yet.
-    // Refinement: I'll use `onSelectEdition` presence as key.
-    // In Manager mode (e.g. from Home -> Edizioni), maybe onSelectEdition is null?
-    // I need to check where SetupEdition is instantiated in Home.
-    
-    // Let's modify the click handler to prioritize Selection if intended, or Edit if not.
-    // Actually, user said: "In modalità modifica [Manager?]... tasto usa non serve".    
-    
-    const clickHandler = (e, edition) => {
-        // If we have an explicit select handler (Game Mode), use it.
-        if (onSelectEdition && typeof onSelectEdition === 'function' && onSelectEdition.name !== 'noop') {
-             onSelectEdition(edition);
-        } else {
-             // Manager Mode -> Edit
-             startEdit(e, edition);
-        }
-    };
-    
-    // Wait, `GamePage` passes `handleSelectEdition`.
-    // If I access `SetupEdition` from Home Button "Gestione Edizioni", do I pass `onSelectEdition`?
-    // If I don't, then `onSelectEdition` is undefined.
-    
-    const isSelectionMode = !!onSelectEdition;
+    // Context Detection
+    // isSelectionMode is now explicitly passed from parent.
 
     return (
-     <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-row h-[90vh]">
+     <div className="w-full max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-row h-[90vh]">
         
         {/* LEFT PANE: LIST */}
         <div className="w-1/3 border-r border-slate-200 bg-slate-50 flex flex-col h-full">

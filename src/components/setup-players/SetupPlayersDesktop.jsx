@@ -36,7 +36,7 @@ const SetupPlayersDesktop = ({
     removeFromSquad
 }) => {
     return (
-     <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-row h-[90vh]">
+     <div className="w-full max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-row h-[90vh]">
             
             {/* LEFT PANE: LIBRARY (Rubrica) */}
             <div className="w-5/12 border-r border-slate-200 bg-white flex flex-col min-h-0">

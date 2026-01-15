@@ -237,6 +237,7 @@ const GamePage = () => {
     if (viewMode === 'SETUP_EDITION') {
         return (
             <SetupEdition 
+                isSelectionMode={true} 
                 onSelectEdition={handleSelectEdition}
                 user={user}
                 privateEditions={privateEditions}
