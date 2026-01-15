@@ -48,18 +48,25 @@ const PlayerEditForm = ({ name, setName, colorIdx, setColorIdx, onSave, onDelete
                 </div>
             </div>
 
-            <div className={`flex gap-3 pt-6 border-t border-slate-100 ${!isCard && 'mt-auto'}`}>
-                <button onClick={onSave} className="flex-1 bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2 text-lg">
-                    <Save size={20}/> Salva Modifiche
-                </button>
-                <button onClick={onDelete} className="px-6 py-4 text-red-500 hover:bg-red-50 rounded-xl transition border border-transparent hover:border-red-100" title="Elimina">
-                    <Trash2 size={24}/>
-                </button>
-                {!isCard && (
-                    <button onClick={onCancel} className="px-6 py-4 text-slate-400 hover:bg-slate-50 rounded-xl transition">
+            {/* Actions Bar (Command Area) */}
+            <div className={`flex gap-4 pt-6 border-t border-slate-100 items-center ${!isCard && 'mt-auto'}`}>
+                {(!isCard || onCancel) && (
+                    <button onClick={onCancel} className="px-6 py-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition">
                         Annulla
                     </button>
                 )}
+                
+                <div className="flex-1 flex justify-center">
+                    {onDelete && (
+                        <button onClick={onDelete} className="px-6 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center gap-2">
+                            <Trash2 size={18}/> Elimina
+                        </button>
+                    )}
+                </div>
+
+                <button onClick={onSave} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center gap-2">
+                    <Save size={20}/> Salva
+                </button>
             </div>
         </div>
     );

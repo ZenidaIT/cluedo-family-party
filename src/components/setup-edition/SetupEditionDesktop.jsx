@@ -34,6 +34,69 @@ const SetupEditionDesktop = ({
     
     const allEditions = [...publicEditions, ...privateEditions];
     const isEditing = !!editingId;
+    // Context Detection: If onSelectEdition is passed, we are likely in Game Selection mode.
+    // If it's undefined (or dummy), we are in Manager mode.
+    // Actually, onSelectEdition is ALWAYS passed in SetupEdition container props.
+    // We need to check if we are in GamePage or elsewhere.
+    // Let's assume onSelectEdition logic is: if it selects for game, it does something.
+    // But in the container:
+    // SetupEdition is used in GamePage (viewMode=SETUP_EDITION). onSelectEdition calls handleSelectEdition.
+    // SetupEdition is used in ??? (Maybe HomePage).
+    // Let's use a prop `isSelectionMode`. If not passed, we infer.
+    // Wait, the User says "In Modalità Modifica non serve a nulla, in Nuova Partita deve selezionare".
+    // So distinct behaviors.
+    // Implementation: simple. Click -> onSelectEdition(ed).
+    // If onSelectEdition is provided, it triggers logic. 
+    // The container `SetupEdition` passes `onSelectEdition`.
+    // In `GamePage` -> `handleSelectEdition` -> Sets edition, goes to next step.
+    // In `HomePage` (if we add it) -> ???
+    
+    // NOTE: Current SetupEdition Container ALWAYS passes `onSelectEdition`.
+    // If we are just managing, maybe we should pass `isManagementMode` prop?
+    // Let's look at `SetupEdition.jsx` container.
+    // It accepts `onSelectEdition`.
+    // BUT the user feedback implies we are in a context where "New Game > Select" happens.
+    // And another context "Gestione Edizioni"?
+    // Currently, `SetupEdition` IS the manager.
+    // If we use it for SELECTION, `onSelectEdition` changes the game state.
+    // If we use it for EDITING, what does `onSelectEdition` do?
+    // In `GamePage`: it sets currentEdition.
+    
+    // User Request 2: "In modalità nuova partita... il click deve selezionare".
+    // User Request 3: "In modalità modifica... tasto usa non serve".
+    // I will assume that if we are editing (Manager), we don't want to select to play.
+    // But both use the same component currently.
+    // FIX: The component logic should be:
+    // CLICK on card:
+    // - If we are in "Game Selection Step": Selects.
+    // - If we are in "Manager Mode": Opens Edit.
+    
+    // How to distinguish?
+    // I'll add a prop `mode` to SetupEditionDesktop, default to 'select' if onSelectEdition is real?
+    // Let's assume explicit prop `isSelectionMode` passed from Container.
+    // Container doesn't know yet.
+    // Refinement: I'll use `onSelectEdition` presence as key.
+    // In Manager mode (e.g. from Home -> Edizioni), maybe onSelectEdition is null?
+    // I need to check where SetupEdition is instantiated in Home.
+    
+    // Let's modify the click handler to prioritize Selection if intended, or Edit if not.
+    // Actually, user said: "In modalità modifica [Manager?]... tasto usa non serve".    
+    
+    const clickHandler = (e, edition) => {
+        // If we have an explicit select handler (Game Mode), use it.
+        if (onSelectEdition && typeof onSelectEdition === 'function' && onSelectEdition.name !== 'noop') {
+             onSelectEdition(edition);
+        } else {
+             // Manager Mode -> Edit
+             startEdit(e, edition);
+        }
+    };
+    
+    // Wait, `GamePage` passes `handleSelectEdition`.
+    // If I access `SetupEdition` from Home Button "Gestione Edizioni", do I pass `onSelectEdition`?
+    // If I don't, then `onSelectEdition` is undefined.
+    
+    const isSelectionMode = !!onSelectEdition;
 
     return (
      <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-row h-[90vh]">
@@ -68,28 +131,29 @@ const SetupEditionDesktop = ({
 
                     return (
                         <div key={ed.id} 
-                            onClick={(e) => startEdit(e, ed)}
-                            className={`p-4 rounded-xl border transition group cursor-pointer flex flex-col gap-2
-                                ${isActive ? 'bg-white border-indigo-500 shadow-md ring-1 ring-indigo-500' : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-sm'}
+                            onClick={(e) => isSelectionMode ? onSelectEdition(ed) : startEdit(e, ed)}
+                            className={`relative p-5 rounded-2xl border transition group cursor-pointer flex flex-col gap-3
+                                ${isActive ? 'bg-white border-indigo-500 shadow-md ring-1 ring-indigo-500' : 'bg-white border-slate-200 hover:border-indigo-400 hover:shadow-lg hover:-translate-y-1'}
                             `}
                         >
                             <div className="flex items-start justify-between">
-                                <h3 className={`font-bold text-base leading-tight ${isActive ? 'text-indigo-700' : 'text-slate-800'}`}>{ed.name}</h3>
-                                {ed.isPublic ? <Globe size={14} className="text-indigo-400"/> : <Lock size={14} className="text-slate-400"/>}
+                                <h3 className={`font-bold text-lg leading-tight ${isActive ? 'text-indigo-700' : 'text-slate-800'}`}>{ed.name}</h3>
                             </div>
                             
-                            <div className="text-xs text-slate-500 flex flex-wrap gap-1 mt-1">
-                                <span className="bg-slate-100 px-2 py-1 rounded">Sospettati: <b>{ed.suspects?.length || 0}</b></span>
-                                <span className="bg-slate-100 px-2 py-1 rounded">Armi: <b>{ed.weapons?.length || 0}</b></span>
-                                <span className="bg-slate-100 px-2 py-1 rounded">Luoghi: <b>{ed.rooms?.length || 0}</b></span>
+                            <div className="flex items-center gap-2">
+                                {ed.isPublic 
+                                    ? <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full flex items-center gap-1 border border-emerald-100"><Globe size={10}/> Pubblica</span>
+                                    : <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-1 rounded-full flex items-center gap-1"><Lock size={10}/> Privata</span>
+                                }
+                            </div>
+                            
+                            <div className="text-xs text-slate-500 flex flex-wrap gap-2 mt-auto">
+                                <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Sospettati: <b>{ed.suspects?.length || 0}</b></span>
+                                <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Armi: <b>{ed.weapons?.length || 0}</b></span>
+                                <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Luoghi: <b>{ed.rooms?.length || 0}</b></span>
                             </div>
 
-                            {/* Only Action on Card: Select (if not editing or just as a shortcut) */}
-                            <div className="border-t border-slate-100 pt-2 flex justify-end gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={(e) => { e.stopPropagation(); onSelectEdition(ed); }} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded flex items-center gap-2" title="Seleziona per Giocare">
-                                    <span className="text-xs font-bold uppercase">Usa</span> <Play size={16} fill="currentColor"/>
-                                </button>
-                            </div>
+                            {/* No Actions on Card - pure click interaction */}
                         </div>
                     );
                  })}

@@ -73,29 +73,34 @@ const EditionForm = ({
                 {renderSection('Armi', 'weapons', tempWeapon, setTempWeapon, 'text-sky-600', 'bg-sky-50')}
                 {renderSection('Luoghi', 'rooms', tempRoom, setTempRoom, 'text-amber-600', 'bg-amber-50')}
             </div>
-            {/* Actions Bar */}
-            <div className={`flex gap-3 pt-6 border-t border-slate-100 mt-8`}>
+
+            {/* Actions Bar (Command Area) */}
+            <div className="flex gap-4 pt-6 border-t border-slate-100 mt-8 items-center">
                 {handleCancel && (
                     <button onClick={handleCancel} className="px-6 py-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition">
                         Annulla
                     </button>
                 )}
 
-                {/* Clone (Only if not NEW) */}
-                {!isNew && handleClone && (
-                     <button onClick={handleClone} className="px-6 py-3 rounded-xl border border-emerald-100 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 font-bold transition flex items-center gap-2">
-                        <Copy size={18}/> Duplica
-                    </button>
-                )}
+                <div className="flex-1 flex gap-2 justify-center">
+                    {/* Delete (Only if not New and Author/Admin) */}
+                    {!isNew && handleDelete && (
+                        <button onClick={handleDelete} className="px-6 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center gap-2">
+                            <Trash2 size={18}/> Elimina
+                        </button>
+                    )}
+                    
+                    {/* Clone (Only if not NEW) */}
+                    {!isNew && handleClone && (
+                        <button onClick={handleClone} className="px-6 py-3 rounded-xl border border-emerald-100 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 font-bold transition flex items-center gap-2">
+                            <Copy size={18}/> Duplica
+                        </button>
+                    )}
+                </div>
 
-                <div className="flex-1"></div>
-
-                {/* Delete (Only if not New and Author/Admin) */}
-                {!isNew && handleDelete && (
-                     <button onClick={handleDelete} className="px-6 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center gap-2">
-                        <Trash2 size={18}/> Elimina
-                    </button>
-                )}
+                <button onClick={handleSave} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center gap-2">
+                    <Save size={20}/> Salva
+                </button>
             </div>
         </div>
     );
