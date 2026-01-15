@@ -1,5 +1,5 @@
 import React from 'react';
-import { Save, Plus, X, Edit, Copy, Trash2 } from 'lucide-react';
+import { Save, Plus, X, Edit, Copy, Trash2, Ban } from 'lucide-react';
 
 const EditionForm = ({ 
     formData, 
@@ -77,28 +77,28 @@ const EditionForm = ({
             {/* Actions Bar (Command Area) */}
             <div className="flex gap-4 pt-6 border-t border-slate-100 mt-8 items-center">
                 {handleCancel && (
-                    <button onClick={handleCancel} className="px-6 py-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition">
-                        Annulla
+                    <button onClick={handleCancel} className="min-w-[140px] px-4 py-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition flex items-center justify-center gap-2">
+                        <Ban size={18}/> Annulla
                     </button>
                 )}
 
                 <div className="flex-1 flex gap-2 justify-center">
                     {/* Delete (Only if not New and Author/Admin) */}
                     {!isNew && handleDelete && (
-                        <button onClick={handleDelete} className="px-6 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center gap-2">
+                        <button onClick={handleDelete} className="min-w-[140px] px-4 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center justify-center gap-2">
                             <Trash2 size={18}/> Elimina
                         </button>
                     )}
                     
                     {/* Clone (Only if not NEW) */}
                     {!isNew && handleClone && (
-                        <button onClick={handleClone} className="px-6 py-3 rounded-xl border border-emerald-100 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 font-bold transition flex items-center gap-2">
+                        <button onClick={handleClone} className="min-w-[140px] px-4 py-3 rounded-xl border border-emerald-100 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 font-bold transition flex items-center justify-center gap-2">
                             <Copy size={18}/> Duplica
                         </button>
                     )}
                 </div>
 
-                <button onClick={handleSave} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center gap-2">
+                <button onClick={handleSave} className="min-w-[160px] bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
                     <Save size={20}/> Salva
                 </button>
             </div>

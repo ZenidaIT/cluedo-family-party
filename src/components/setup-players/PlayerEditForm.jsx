@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Save, Trash2, Check, Palette } from 'lucide-react';
+import { X, Save, Trash2, Check, Palette, Ban } from 'lucide-react';
 import { PLAYER_COLORS } from '../../constants';
 
 const PlayerEditForm = ({ name, setName, colorIdx, setColorIdx, onSave, onDelete, onCancel, variant = 'card' }) => {
@@ -31,7 +31,7 @@ const PlayerEditForm = ({ name, setName, colorIdx, setColorIdx, onSave, onDelete
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
                     <Palette size={14}/> Colore Pedina
                 </label>
-                <div className="flex flex-wrap gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar p-1">
+                <div className="flex flex-wrap gap-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar p-2">
                     {PLAYER_COLORS.map((c, idx) => (
                         <button 
                             key={idx}
@@ -51,24 +51,25 @@ const PlayerEditForm = ({ name, setName, colorIdx, setColorIdx, onSave, onDelete
             {/* Actions Bar (Command Area) */}
             <div className={`flex gap-4 pt-6 border-t border-slate-100 items-center ${!isCard && 'mt-auto'}`}>
                 {(!isCard || onCancel) && (
-                    <button onClick={onCancel} className="px-6 py-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition">
-                        Annulla
+                    <button onClick={onCancel} className="min-w-[140px] px-4 py-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition flex items-center justify-center gap-2">
+                        <Ban size={18}/> Annulla
                     </button>
                 )}
                 
                 <div className="flex-1 flex justify-center">
                     {onDelete && (
-                        <button onClick={onDelete} className="px-6 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center gap-2">
+                        <button onClick={onDelete} className="min-w-[140px] px-4 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center justify-center gap-2">
                             <Trash2 size={18}/> Elimina
                         </button>
                     )}
                 </div>
 
-                <button onClick={onSave} className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center gap-2">
+                <button onClick={onSave} className="min-w-[160px] bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center justify-center gap-2">
                     <Save size={20}/> Salva
                 </button>
             </div>
         </div>
+
     );
 };
 

@@ -35,6 +35,8 @@ const SetupEditionDesktop = ({
     
     // Context Detection
     // isSelectionMode is now explicitly passed from parent.
+    const allEditions = [...publicEditions, ...privateEditions];
+    const isEditing = !!editingId;
 
     return (
      <div className="w-full max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-row h-[90vh]">
