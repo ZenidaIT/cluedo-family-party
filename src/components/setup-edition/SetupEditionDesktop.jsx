@@ -78,11 +78,9 @@ const SetupEditionDesktop = ({
                         >
                             {/* Green Header for Public Editions */}
                             {ed.isPublic && (
-                                <div className="bg-emerald-500 text-white p-3 flex flex-col items-center justify-center gap-1">
-                                    <div className="bg-white/20 p-1.5 rounded-full">
-                                        <Globe size={16} className="text-white"/>
-                                    </div>
-                                    <span className="text-[10px] uppercase font-bold tracking-widest">Edizione Pubblica</span>
+                                <div className="bg-emerald-500 text-white px-3 py-1 flex items-center justify-center gap-2">
+                                    <Globe size={12} className="text-white"/>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest">Pubblica</span>
                                 </div>
                             )}
                             

@@ -50,7 +50,8 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
               title: 'Giocatore già esistente',
               text: `"${existing.name}" è già nella tua rubrica. Usa un soprannome o una variante se intendi un'altra persona.`,
               icon: 'info',
-              confirmButtonText: 'Capito'
+              confirmButtonText: 'Capito',
+              allowEnterKey: false // Prevent immediate dismissal if triggered by Enter
           });
       } else {
           try {
