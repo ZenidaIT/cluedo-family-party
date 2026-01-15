@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Book, Plus, Edit, Trash2, Copy, Globe, Lock, Save } from 'lucide-react';
+import { ArrowLeft, Book, Plus, Edit, Trash2, Copy, Globe, Lock, Save, Play } from 'lucide-react';
 import EditionForm from './EditionForm';
 
 const SetupEditionDesktop = ({
@@ -68,7 +68,7 @@ const SetupEditionDesktop = ({
 
                     return (
                         <div key={ed.id} 
-                            onClick={() => onSelectEdition(ed)}
+                            onClick={(e) => startEdit(e, ed)}
                             className={`p-4 rounded-xl border transition group cursor-pointer flex flex-col gap-2
                                 ${isActive ? 'bg-white border-indigo-500 shadow-md ring-1 ring-indigo-500' : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-sm'}
                             `}
@@ -84,13 +84,12 @@ const SetupEditionDesktop = ({
                                 <span className="bg-slate-100 px-2 py-1 rounded">Luoghi: <b>{ed.rooms?.length || 0}</b></span>
                             </div>
 
-                            {(canEdit || ed.isPublic) && (
-                                <div className="border-t border-slate-100 pt-2 flex justify-end gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                     {canEdit && <button onClick={(e) => startEdit(e, ed)} className="p-2 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 rounded" title="Modifica"><Edit size={18}/></button>}
-                                     {canEdit && <button onClick={(e) => handleDelete(e, ed)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded" title="Elimina"><Trash2 size={18}/></button>}
-                                     {ed.isPublic && <button onClick={(e) => startClone(e, ed)} className="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded" title="Clona"><Copy size={18}/></button>}
-                                </div>
-                            )}
+                            {/* Only Action on Card: Select (if not editing or just as a shortcut) */}
+                            <div className="border-t border-slate-100 pt-2 flex justify-end gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={(e) => { e.stopPropagation(); onSelectEdition(ed); }} className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded flex items-center gap-2" title="Seleziona per Giocare">
+                                    <span className="text-xs font-bold uppercase">Usa</span> <Play size={16} fill="currentColor"/>
+                                </button>
+                            </div>
                         </div>
                     );
                  })}
@@ -126,6 +125,11 @@ const SetupEditionDesktop = ({
                         setFormData={setFormData}
                         isAdmin={isAdmin} 
                         handleSave={handleSave} 
+                        // Actions
+                        handleDelete={(e) => handleDelete(e, allEditions.find(ed => ed.id === editingId))}
+                        handleClone={(e) => startClone(e, allEditions.find(ed => ed.id === editingId))}
+                        handleCancel={() => setEditingId(null)}
+                        
                         tempSuspect={tempSuspect} setTempSuspect={setTempSuspect}
                         tempWeapon={tempWeapon} setTempWeapon={setTempWeapon}
                         tempRoom={tempRoom} setTempRoom={setTempRoom}

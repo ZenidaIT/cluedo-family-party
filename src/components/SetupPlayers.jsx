@@ -197,7 +197,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col items-center p-4">
+    <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-4">
         {/* Render Mobile View on small screens, Desktop on md+ */}
         {/* We use CSS display logic to keep both in DOM or we could use media query hook to mount only one. 
             Given the goal of "distinct interfaces", mounting only one is cleaner for accessible DOM, 

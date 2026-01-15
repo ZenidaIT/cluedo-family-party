@@ -87,7 +87,7 @@ const SetupPlayersDesktop = ({
 
                        return (
                            <div key={sp.id} 
-                                onClick={() => onToggleSquad(sp)}
+                                onClick={() => isStandalone ? startEditing(sp) : onToggleSquad(sp)}
                                 className={`flex items-center justify-between p-3 rounded-xl border transition cursor-pointer select-none
                                     ${isEditingThis
                                         ? 'bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500' // Highlight when editing
@@ -101,10 +101,12 @@ const SetupPlayersDesktop = ({
                                </div>
 
                                <div className="flex items-center gap-1">
-                                    <button onClick={(e) => { e.stopPropagation(); startEditing(sp); }} 
-                                        className={`p-2 rounded-full transition ${inSquad ? 'text-indigo-400 hover:bg-indigo-100 hover:text-indigo-700' : 'text-slate-300 hover:text-indigo-500 hover:bg-indigo-50'}`}>
-                                        <Pencil size={16}/>
-                                    </button>
+                                    {!isStandalone && (
+                                        <button onClick={(e) => { e.stopPropagation(); startEditing(sp); }} 
+                                            className={`p-2 rounded-full transition ${inSquad ? 'text-indigo-400 hover:bg-indigo-100 hover:text-indigo-700' : 'text-slate-300 hover:text-indigo-500 hover:bg-indigo-50'}`}>
+                                            <Pencil size={16}/>
+                                        </button>
+                                    )}
                                </div>
                            </div>
                        );

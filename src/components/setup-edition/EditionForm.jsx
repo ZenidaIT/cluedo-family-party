@@ -1,5 +1,5 @@
 import React from 'react';
-import { Save, Plus, X, Edit } from 'lucide-react';
+import { Save, Plus, X, Edit, Copy, Trash2 } from 'lucide-react';
 
 const EditionForm = ({ 
     formData, 
@@ -12,7 +12,11 @@ const EditionForm = ({
     tempWeapon, setTempWeapon,
     tempRoom, setTempRoom,
     addItem, 
-    removeItem 
+    removeItem,
+    // Actions props
+    handleDelete,
+    handleClone,
+    handleCancel
 }) => {
     
     // Helper to render sections
@@ -68,6 +72,30 @@ const EditionForm = ({
                 {renderSection('Sospettati', 'suspects', tempSuspect, setTempSuspect, 'text-rose-600', 'bg-rose-50')}
                 {renderSection('Armi', 'weapons', tempWeapon, setTempWeapon, 'text-sky-600', 'bg-sky-50')}
                 {renderSection('Luoghi', 'rooms', tempRoom, setTempRoom, 'text-amber-600', 'bg-amber-50')}
+            </div>
+            {/* Actions Bar */}
+            <div className={`flex gap-3 pt-6 border-t border-slate-100 mt-8`}>
+                {handleCancel && (
+                    <button onClick={handleCancel} className="px-6 py-3 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold transition">
+                        Annulla
+                    </button>
+                )}
+
+                {/* Clone (Only if not NEW) */}
+                {!isNew && handleClone && (
+                     <button onClick={handleClone} className="px-6 py-3 rounded-xl border border-emerald-100 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 font-bold transition flex items-center gap-2">
+                        <Copy size={18}/> Duplica
+                    </button>
+                )}
+
+                <div className="flex-1"></div>
+
+                {/* Delete (Only if not New and Author/Admin) */}
+                {!isNew && handleDelete && (
+                     <button onClick={handleDelete} className="px-6 py-3 rounded-xl border border-red-100 text-red-500 bg-red-50 hover:bg-red-100 font-bold transition flex items-center gap-2">
+                        <Trash2 size={18}/> Elimina
+                    </button>
+                )}
             </div>
         </div>
     );
