@@ -46,7 +46,12 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
 
       const existing = savedPlayers.find(p => p.name.toLowerCase() === trimmedTerm.toLowerCase());
       if (existing) {
-          MySwal.fire('Attenzione', `${existing.name} è già presente in rubrica.`, 'warning');
+          MySwal.fire({
+              title: 'Giocatore già esistente',
+              text: `"${existing.name}" è già nella tua rubrica. Usa un soprannome o una variante se intendi un'altra persona.`,
+              icon: 'info',
+              confirmButtonText: 'Capito'
+          });
       } else {
           try {
               const newColorIdx = Math.floor(Math.random() * PLAYER_COLORS.length);
@@ -87,7 +92,12 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       
       const duplicate = savedPlayers.find(p => p.name.toLowerCase() === editingName.trim().toLowerCase() && p.id !== editingId);
       if (duplicate) {
-          return MySwal.fire('Attenzione', `Il nome ${duplicate.name} è già in uso.`, 'warning');
+          return MySwal.fire({
+              title: 'Nome già in uso',
+              text: `Il nome "${duplicate.name}" è già presente in rubrica. Scegline uno diverso per evitare confusione.`,
+              icon: 'warning',
+              confirmButtonText: 'Ok, cambio nome'
+          });
       }
 
       try {

@@ -21,6 +21,7 @@ const GamePage = () => {
     const [saveStatus, setSaveStatus] = useState('saved');
 
     // Game State
+    const [status, setStatus] = useState('setup'); // 'setup' | 'active'
     const [currentEdition, setCurrentEdition] = useState(null);
     const [gamePlayers, setGamePlayers] = useState([{ id: 'p1', name: 'Tu', colorIdx: 0 }]);
     const [gridData, setGridData] = useState({});
@@ -31,17 +32,27 @@ const GamePage = () => {
     let viewMode = 'LOADING';
 
     if (!loading && !error) {
-        if (stepParam === 'setup_edition') {
-            viewMode = 'SETUP_EDITION';
-        } else if (stepParam === 'setup_players') {
-            viewMode = 'SETUP_PLAYERS';
-        } else if (currentEdition && stepParam === 'game') {
-             viewMode = 'GAME';
+        // Priority 1: Explicit URL Step (if valid)
+        // Priority 2: Game Status (Persistent)
+        // Priority 3: Fallback Heuristics
+        
+        // We need to know if the game is ACTUALLY started.
+        // We'll trust searchParams if present AND valid, otherwise we look at data.
+        
+        // New Logic: Check 'status' field.
+        const gameStatus = currentEdition ? (gridData._status || 'setup') : 'setup'; 
+        // Note: I will store status in gridData._status for now to avoid migrating root schema, 
+        // OR better, I will assume if 'step' param is missing, we check persistence.
+        
+        if (stepParam) {
+            if (stepParam === 'setup_edition') viewMode = 'SETUP_EDITION';
+            else if (stepParam === 'setup_players') viewMode = 'SETUP_PLAYERS';
+            else if (stepParam === 'game') viewMode = 'GAME';
         } else {
-            // Heuristic (Default behavior)
+            // Priority 2: Game Status (Persistent)
             if (!currentEdition) viewMode = 'SETUP_EDITION';
-            else if (!gamePlayers || gamePlayers.length <= 1) viewMode = 'SETUP_PLAYERS';
-            else viewMode = 'GAME';
+            else if (status === 'active') viewMode = 'GAME'; // Only go to game if explicitly active
+            else viewMode = 'SETUP_PLAYERS';
         }
     }
 
@@ -61,6 +72,7 @@ const GamePage = () => {
                     // Flag this as a remote update to prevent echo-saving
                     isRemoteUpdate.current = true;
 
+                    setStatus(gameState.status || 'setup');
                     setCurrentEdition(gameState.edition);
                     setGamePlayers(gameState.players || []);
                     setGridData(gameState.gridData || {});
@@ -150,13 +162,14 @@ const GamePage = () => {
         }
 
         const currentState = {
+            status: status,
             edition: currentEdition,
             players: gamePlayers,
             gridData: gridData,
             historyLog: historyLog
         };
         debouncedSave(currentState);
-    }, [currentEdition, gamePlayers, gridData, historyLog, sessionId]);
+    }, [status, currentEdition, gamePlayers, gridData, historyLog, sessionId]);
 
 
     // --- GAME ACTIONS ---
@@ -166,6 +179,7 @@ const GamePage = () => {
         setSearchParams({ step: 'setup_players', from: 'setup_edition' });
         // Immediate save
         saveGameToFirestore({
+            status: 'setup',
             edition: edition,
             players: gamePlayers,
             gridData: gridData,
@@ -175,8 +189,10 @@ const GamePage = () => {
 
     const handleStartGame = () => {
         setSearchParams({ step: 'game' });
+        setStatus('active');
         // Immediate save
         saveGameToFirestore({
+            status: 'active',
             edition: currentEdition,
             players: gamePlayers,
             gridData: gridData,

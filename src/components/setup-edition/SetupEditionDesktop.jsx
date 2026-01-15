@@ -72,25 +72,31 @@ const SetupEditionDesktop = ({
                     return (
                         <div key={ed.id} 
                             onClick={(e) => isSelectionMode ? onSelectEdition(ed) : startEdit(e, ed)}
-                            className={`relative p-5 rounded-2xl border transition group cursor-pointer flex flex-col gap-3
+                            className={`relative rounded-2xl border transition group cursor-pointer flex flex-col gap-3 overflow-hidden
                                 ${isActive ? 'bg-white border-indigo-500 shadow-md ring-1 ring-indigo-500' : 'bg-white border-slate-200 hover:border-indigo-400 hover:shadow-lg hover:-translate-y-1'}
                             `}
                         >
-                            <div className="flex items-start justify-between">
-                                <h3 className={`font-bold text-lg leading-tight ${isActive ? 'text-indigo-700' : 'text-slate-800'}`}>{ed.name}</h3>
-                            </div>
+                            {/* Green Header for Public Editions */}
+                            {ed.isPublic && (
+                                <div className="bg-emerald-500 text-white p-3 flex flex-col items-center justify-center gap-1">
+                                    <div className="bg-white/20 p-1.5 rounded-full">
+                                        <Globe size={16} className="text-white"/>
+                                    </div>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest">Edizione Pubblica</span>
+                                </div>
+                            )}
                             
-                            <div className="flex items-center gap-2">
-                                {ed.isPublic 
-                                    ? <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full flex items-center gap-1 border border-emerald-100"><Globe size={10}/> Pubblica</span>
-                                    : <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-100 px-2 py-1 rounded-full flex items-center gap-1"><Lock size={10}/> Privata</span>
-                                }
-                            </div>
-                            
-                            <div className="text-xs text-slate-500 flex flex-wrap gap-2 mt-auto">
-                                <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Sospettati: <b>{ed.suspects?.length || 0}</b></span>
-                                <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Armi: <b>{ed.weapons?.length || 0}</b></span>
-                                <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Luoghi: <b>{ed.rooms?.length || 0}</b></span>
+                            <div className="p-5 flex flex-col gap-3 h-full">
+                                <div className="flex items-start justify-between">
+                                    <h3 className={`font-bold text-lg leading-tight ${isActive ? 'text-indigo-700' : 'text-slate-800'}`}>{ed.name}</h3>
+                                    {!ed.isPublic && <Lock size={14} className="text-slate-300"/>}
+                                </div>
+                                
+                                <div className="text-xs text-slate-500 flex flex-wrap gap-2 mt-auto">
+                                    <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Sospettati: <b>{ed.suspects?.length || 0}</b></span>
+                                    <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Armi: <b>{ed.weapons?.length || 0}</b></span>
+                                    <span className="bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">Luoghi: <b>{ed.rooms?.length || 0}</b></span>
+                                </div>
                             </div>
 
                             {/* No Actions on Card - pure click interaction */}
@@ -108,11 +114,7 @@ const SetupEditionDesktop = ({
                     {isEditing ? (editingId === 'NEW' ? 'Nuova Edizione' : 'Modifica Edizione') : 'Seleziona un\'edizione'}
                  </h2>
 
-                 {isEditing && (
-                    <button onClick={handleSave} className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg shadow-indigo-200 transition flex items-center gap-2">
-                        <Save size={18}/> Salva
-                    </button>
-                 )}
+
             </div>
 
             {/* Form Content */}
