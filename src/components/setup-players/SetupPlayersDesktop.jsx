@@ -1,7 +1,8 @@
 import React from 'react';
 import { ArrowLeft, User, Search, Plus, Save, Pencil, Check, GripVertical, X, UserPlus } from 'lucide-react';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay, pointerWithin } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { PLAYER_COLORS } from '../../constants';
 import PlayerEditForm from './PlayerEditForm';
 import SortablePlayerItem from './SortablePlayerItem';
@@ -206,7 +207,8 @@ const SetupPlayersDesktop = ({
                                 <div className="max-w-2xl mx-auto">
                                     <DndContext 
                                         sensors={sensors}
-                                        collisionDetection={closestCenter}
+                                        collisionDetection={pointerWithin}
+                                        modifiers={[restrictToVerticalAxis]}
                                         onDragEnd={handleDragEnd}
                                     >
                                         <SortableContext 
