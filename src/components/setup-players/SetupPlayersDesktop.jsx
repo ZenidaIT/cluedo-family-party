@@ -1,7 +1,10 @@
 import React from 'react';
 import { ArrowLeft, User, Search, Plus, Save, Pencil, Check, GripVertical, X, UserPlus } from 'lucide-react';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { PLAYER_COLORS } from '../../constants';
 import PlayerEditForm from './PlayerEditForm';
+import SortablePlayerItem from './SortablePlayerItem';
 
 const SetupPlayersDesktop = ({
     user,
@@ -33,8 +36,41 @@ const SetupPlayersDesktop = ({
     // Dnd
     onDragStart,
     onDragEnter,
-    removeFromSquad
+    removeFromSquad,
+    movePlayer
 }) => {
+    // Dnd Kit Sensors
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+        if (active.id !== over.id) {
+            // Find indexes based on item ID (passed as player.id)
+            const oldIndex = players.findIndex((p) => p.id === active.id);
+            const newIndex = players.findIndex((p) => p.id === over.id);
+            // Call parent mover
+            // We need to access movePlayer from props or call a wrapper.
+            // SetupPlayers passes `movePlayer`? NO, it passes `onDragEnter` logic which calls `movePlayer` internally in parent.
+            // I need to expose `movePlayer` from parent to this component or use the existing logic differently.
+            // Checking SetupPlayers.jsx... it has `movePlayer` but it's not passed directly.
+            // It passes: user, savedPlayers, players, searchTerm, setSearchTerm, handleCreate, isStandalone, onBack, onStartGame, filteredLibrary, onToggleSquad, isInSquad, editingId... AND `onDragStart`, `onDragEnter`, `removeFromSquad`.
+            
+            // Ah, I need to request `movePlayer` to be passed down OR implement `onDragOver` simulation.
+            // Better to pass `movePlayer` down. I will modify SetupPlayers.jsx first or Assume I can modify it.
+            // But wait, the user instructions were "Riesci a rendere più fluido...".
+            // Implementation Plan said: "Handle onDragEnd to trigger movePlayer".
+            // I need `movePlayer`.
+            
+            // For now, I will assume `movePlayer` is passed. I'll add it to the prop destructuring.
+            if (movePlayer) movePlayer(oldIndex, newIndex);
+        }
+    };
+
     return (
      <div className="w-full max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-row h-[90vh]">
             
@@ -167,26 +203,29 @@ const SetupPlayersDesktop = ({
                                     <p className="text-sm">Aggiungi giocatori dalla Rubrica a sinistra.</p>
                                 </div>
                             ) : (
-                                players.map((p, idx) => (
-                                    <div key={p.id} draggable 
-                                        onDragStart={(e) => onDragStart(e, idx)} 
-                                        onDragOver={(e) => e.preventDefault()}
-                                        onDragEnter={(e) => onDragEnter(e, idx)}
-                                        className="flex items-center gap-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm cursor-move hover:border-indigo-300 hover:shadow-md transition group animate-in zoom-in-95 duration-200">
-                                        
-                                        <GripVertical className="text-slate-300 group-hover:text-indigo-400" size={20}/>
-                                        
-                                        <div className={`w-10 h-10 rounded-full ${PLAYER_COLORS[p.colorIdx]?.class || 'bg-gray-400'} shadow-md border-2 border-white ring-1 ring-slate-200 flex items-center justify-center font-bold text-white text-xs`}>
-                                            {idx + 1}
-                                        </div>
-                                        
-                                        <span className="font-bold text-slate-800 text-lg flex-1 truncate">{p.name}</span>
-                                        
-                                        <button onClick={() => removeFromSquad(p.id)} className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition">
-                                            <X size={20}/>
-                                        </button>
-                                    </div>
-                                ))
+                                <div className="max-w-2xl mx-auto">
+                                    <DndContext 
+                                        sensors={sensors}
+                                        collisionDetection={closestCenter}
+                                        onDragEnd={handleDragEnd}
+                                    >
+                                        <SortableContext 
+                                            items={players.map(p => p.id)}
+                                            strategy={verticalListSortingStrategy}
+                                        >
+                                            <div className="space-y-3">
+                                                {players.map((p, idx) => (
+                                                    <SortablePlayerItem 
+                                                        key={p.id} 
+                                                        player={p} 
+                                                        index={idx} 
+                                                        onRemove={removeFromSquad}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </SortableContext>
+                                    </DndContext>
+                                </div>
                             )}
                         </div>
                     )}

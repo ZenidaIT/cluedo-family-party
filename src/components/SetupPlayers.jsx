@@ -203,6 +203,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       
       // Dnd / Squad mgmt
       removeFromSquad,
+      movePlayer,
       onDragStart,
       onDragEnter
   };

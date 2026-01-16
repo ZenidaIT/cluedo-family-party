@@ -80,7 +80,7 @@ const SetupEditionDesktop = ({
                             {ed.isPublic && (
                                 <div className="bg-emerald-500 text-white px-3 py-1 flex items-center justify-center gap-2">
                                     <Globe size={12} className="text-white"/>
-                                    <span className="text-[10px] uppercase font-bold tracking-widest">Pubblica</span>
+                                    <span className="text-[10px] uppercase font-bold tracking-widest">Edizione Pubblica</span>
                                 </div>
                             )}
                             
