@@ -1,11 +1,12 @@
-import React from 'react';
-import { ArrowLeft, User, Search, Plus, Save, Pencil, Check, GripVertical, X, UserPlus } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowLeft, User, Search, Plus, Save, Pencil, Check, UserPlus } from 'lucide-react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay, pointerWithin } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { PLAYER_COLORS } from '../../constants';
 import PlayerEditForm from './PlayerEditForm';
 import SortablePlayerItem from './SortablePlayerItem';
+import PlayerItem from './PlayerItem';
 
 const SetupPlayersDesktop = ({
     user,
@@ -35,8 +36,6 @@ const SetupPlayersDesktop = ({
     setEditingId,
 
     // Dnd
-    onDragStart,
-    onDragEnter,
     removeFromSquad,
     movePlayer
 }) => {
@@ -46,11 +45,25 @@ const SetupPlayersDesktop = ({
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
+
     );
+
+    const [activeId, setActiveId] = useState(null);
+
+    const handleDragStart = (event) => {
+        setActiveId(event.active.id);
+        // Do not call parent onDragStart as it expects HTML5 DnD event
+    };
+    
+    const handleDragCancel = () => {
+        setActiveId(null);
+    };
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
-        if (active.id !== over.id) {
+        setActiveId(null);
+
+        if (active.id !== over?.id) {
             // Find indexes based on item ID (passed as player.id)
             const oldIndex = players.findIndex((p) => p.id === active.id);
             const newIndex = players.findIndex((p) => p.id === over.id);
@@ -209,7 +222,9 @@ const SetupPlayersDesktop = ({
                                         sensors={sensors}
                                         collisionDetection={pointerWithin}
                                         modifiers={[restrictToVerticalAxis]}
+                                        onDragStart={handleDragStart}
                                         onDragEnd={handleDragEnd}
+                                        onDragCancel={handleDragCancel}
                                     >
                                         <SortableContext 
                                             items={players.map(p => p.id)}
@@ -226,6 +241,15 @@ const SetupPlayersDesktop = ({
                                                 ))}
                                             </div>
                                         </SortableContext>
+                                        <DragOverlay>
+                                            {activeId ? (
+                                                <PlayerItem 
+                                                    player={players.find(p => p.id === activeId)}
+                                                    index={players.findIndex(p => p.id === activeId)}
+                                                    className="shadow-2xl scale-105 ring-2 ring-indigo-500 cursor-grabbing bg-white/90 backdrop-blur"
+                                                />
+                                            ) : null}
+                                        </DragOverlay>
                                     </DndContext>
                                 </div>
                             )}

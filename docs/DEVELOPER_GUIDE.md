@@ -70,6 +70,28 @@ Questa guida è pensata per nuovi sviluppatori (o agenti AI) che devono configur
 - **`GamePage.jsx`**: Il core dell'app. Gestisce lo stato della partita, la griglia e il log.
 - **`Grid.jsx`**: La tabella di gioco. Implementa la logica di deduzione visuale.
 
+## Drag & Drop Implementation
+
+Il riordinamento dei giocatori usa **@dnd-kit** per garantire fluidità e accessibilità.
+
+### Architettura
+
+- **Libreria**: `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/modifiers`.
+- **Sensori**: `PointerSensor` (Mouse/Touch) e `KeyboardSensor` (Accessibilità).
+- **Collisioni**: `pointerWithin` (più preciso per liste verticali rispetto a rettangoli).
+
+### Componenti Chiave
+
+1. **`SetupPlayersDesktop.jsx`**: Contiene il `DndContext`.
+   - Gestisce lo stato `activeId` per sapere chi si sta trascinando.
+   - Renderizza `SortableContext` per la lista.
+   - Renderizza `DragOverlay` per l'elemento "in volo".
+2. **`SortablePlayerItem.jsx`**: Wrapper che connette il giocatore al sistema di ordinamento.
+   - Quando trascinato, **nasconde** l'elemento originale (`opacity: 0.3`) per lasciare spazio al "fantasma" gestito dall'Overlay.
+   - Usa `transition` default per lo spostamento fluido degli altri elementi.
+3. **`DragOverlay`**: Renderizza una copia perfetta (`PlayerItem`) sopra a tutto.
+   - Risolve il problema del "flash" visivo e garantisce che l'elemento segua il cursore senza lag (rimuovendo le animazioni di transizione sull'elemento trascinato).
+
 ## Deployment
 
 Il deploy è manuale (per ora) tramite CLI Firebase.

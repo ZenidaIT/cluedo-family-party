@@ -39,8 +39,20 @@ Componenti UI riutilizzabili e viste principali.
 
 - **`Lobby.jsx`**: Dashboard iniziale. Mostra le partite recenti salvate su Firestore e pulsanti per iniziare.
 - **`Login.jsx`**: Schermata di login con pulsante Google.
-- **`SetupEdition.jsx`**: Gestione Edizioni (Classic vs Custom). Permette di creare/modificare/clonare edizioni.
-- **`SetupPlayers.jsx`**: Gestione Rubrica e Squadra. Selezione giocatori, creazione nuovi profili, color picker.
+- **`SetupEdition.jsx`**: Controller. Gestisce lo stato delle Edizioni e delega alle viste specifiche.
+
+  - `setup-edition/`
+    - **`SetupEditionDesktop.jsx`**: Split View (Lista Edizioni + Form Modifica).
+    - **`SetupEditionMobile.jsx`**: Lista Edizioni (Form apre in modale/pagina a parte).
+    - **`EditionForm.jsx`**: Form riutilizzabile per i dettagli edizione.
+
+- **`SetupPlayers.jsx`**: Controller. Gestisce Rubrica, Squadra e logica di salvataggio.
+  - `setup-players/`
+    - **`SetupPlayersDesktop.jsx`**: Split View. Implementa **Drag & Drop** con `dnd-kit`.
+    - **`SetupPlayersMobile.jsx`**: Lista ottimizzata touch.
+    - **`PlayerItem.jsx`**: Componente UI puro per la singola card giocatore (usato anche nel DragOverlay).
+    - **`SortablePlayerItem.jsx`**: Wrapper `dnd-kit` per rendere `PlayerItem` ordinabile.
+    - **`PlayerEditForm.jsx`**: Form per creare/modificare giocatori.
 - **`GameView.jsx`**: Il "tavolo da gioco". Orchestra la Griglia, il Menu e il Log.
   - Gestisce il layout responsive (Mobile vs Desktop Split View).
 

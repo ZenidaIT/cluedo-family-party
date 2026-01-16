@@ -30,14 +30,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       setPlayers(newP);
   };
 
-  const [draggedPeerIdx, setDraggedPeerIdx] = React.useState(null);
-  const onDragStart = (e, idx) => { setDraggedPeerIdx(idx); e.dataTransfer.effectAllowed = "move"; }
-  const onDragEnter = (e, targetIdx) => {
-       if (draggedPeerIdx !== null && draggedPeerIdx !== targetIdx) {
-           movePlayer(draggedPeerIdx, targetIdx);
-           setDraggedPeerIdx(targetIdx);
-       }
-  }
+
 
   // --- ADDRESS BOOK LOGIC ---
   const handleCreate = async () => {
@@ -203,9 +196,7 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       
       // Dnd / Squad mgmt
       removeFromSquad,
-      movePlayer,
-      onDragStart,
-      onDragEnter
+      movePlayer
   };
 
   return (

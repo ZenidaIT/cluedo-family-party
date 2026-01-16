@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, Book, Plus, Edit, Trash2, Copy, Globe, Lock, Save, Play } from 'lucide-react';
+import { ArrowLeft, Book, Plus, Edit, Globe, Lock } from 'lucide-react';
 import EditionForm from './EditionForm';
 
 const SetupEditionDesktop = ({

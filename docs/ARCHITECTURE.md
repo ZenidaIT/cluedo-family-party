@@ -10,6 +10,7 @@ L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo
 
 - **Frontend**: React (v18), Vite
 - **PWA**: `vite-plugin-pwa` (Service Worker, Manifest, Installabilità)
+- **Drag & Drop**: `@dnd-kit` (Core, Sortable, Modifiers)
 - **Stile**: Tailwind CSS (Utility-first framework)
 - **Icone**: Lucide React
 - **Asset**: SVG nativi

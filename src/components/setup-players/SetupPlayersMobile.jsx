@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, User, Search, Plus, Save, Pencil, Check, X, UserPlus, GripVertical } from 'lucide-react';
+import { ArrowLeft, User, Search, Plus, Save, Pencil, Check, X } from 'lucide-react';
 import { PLAYER_COLORS } from '../../constants';
 import PlayerEditForm from './PlayerEditForm';
 

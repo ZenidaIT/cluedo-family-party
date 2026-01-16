@@ -35,6 +35,7 @@ Un'applicazione web moderna per gestire le partite di Cluedo in famiglia, sostit
 ## 🛠️ Tecnologie
 
 - **Frontend**: React, Vite, TailwindCSS
+- **Drag & Drop**: @dnd-kit
 - **Backend / Database**: Firebase (Auth, Firestore, Hosting)
 - **Icons**: Lucide React
 - **Alerts**: SweetAlert2
