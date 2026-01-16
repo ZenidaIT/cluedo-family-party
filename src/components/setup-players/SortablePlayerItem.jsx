@@ -16,7 +16,7 @@ const SortablePlayerItem = ({ player, index, onRemove }) => {
 
     const style = {
         transform: CSS.Transform.toString(transform),
-        transition,
+        transition: isDragging ? null : transition, // Prevent lag when dragging
         opacity: isDragging ? 0.4 : 1,
         touchAction: 'none' // Required for pointer sensors
     };
