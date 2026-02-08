@@ -67,20 +67,7 @@ const SetupPlayersDesktop = ({
             // Find indexes based on item ID (passed as player.id)
             const oldIndex = players.findIndex((p) => p.id === active.id);
             const newIndex = players.findIndex((p) => p.id === over.id);
-            // Call parent mover
-            // We need to access movePlayer from props or call a wrapper.
-            // SetupPlayers passes `movePlayer`? NO, it passes `onDragEnter` logic which calls `movePlayer` internally in parent.
-            // I need to expose `movePlayer` from parent to this component or use the existing logic differently.
-            // Checking SetupPlayers.jsx... it has `movePlayer` but it's not passed directly.
-            // It passes: user, savedPlayers, players, searchTerm, setSearchTerm, handleCreate, isStandalone, onBack, onStartGame, filteredLibrary, onToggleSquad, isInSquad, editingId... AND `onDragStart`, `onDragEnter`, `removeFromSquad`.
             
-            // Ah, I need to request `movePlayer` to be passed down OR implement `onDragOver` simulation.
-            // Better to pass `movePlayer` down. I will modify SetupPlayers.jsx first or Assume I can modify it.
-            // But wait, the user instructions were "Riesci a rendere più fluido...".
-            // Implementation Plan said: "Handle onDragEnd to trigger movePlayer".
-            // I need `movePlayer`.
-            
-            // For now, I will assume `movePlayer` is passed. I'll add it to the prop destructuring.
             if (movePlayer) movePlayer(oldIndex, newIndex);
         }
     };

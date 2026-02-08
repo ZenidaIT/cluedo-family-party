@@ -32,11 +32,11 @@ const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick }) => {
     };
 
     return (
-        // Main Container: Centered, minimal padding mobile, more padding desktop
-        <div className="flex-1 min-h-0 relative flex flex-col items-center bg-slate-100 p-1 md:p-4 lg:p-6 overflow-hidden">
+        // Main Container: Full Size, Natural Height
+        <div className="flex-1 relative flex flex-col bg-white">
             
-            {/* Scroll Wrapper */}
-            <div className="w-full max-w-full md:max-w-4xl lg:max-w-6xl overflow-auto pb-24 md:pb-8 shadow-sm border rounded bg-white transition-all duration-300">
+            {/* Table Wrapper - No Scroll here, parent handles it */}
+            <div className="w-full shadow-none bg-white">
                 <table className="border-collapse w-full font-sans text-xs md:text-sm lg:text-base">
                     
                     {/* TABLE HEADER */}

@@ -7,12 +7,16 @@ Leggere sempre questo file prima di iniziare un nuovo task per allinearsi con la
 
 ## 📅 Pianificati (Next Up)
 
-### 🚀 Funzionalità Future
-
-- [ ] **Modalità Spettatore**: Visione real-time della griglia di altri giocatori.
-- [ ] **Statistiche Avanzate**: Win rate per personaggio.
+- [ ] **Ottimizzazione Mobile**: Touch targets e UX.
 
 ## ✅ Completati
+
+### 🖥️ Desktop GUI Interfaccia
+
+- [x] **Riprogettazione Griglia Desktop**:
+  - [x] Header: Icona Home separata, Titolo testo semplice.
+  - [x] Codice Partita: Sottotesto cliccabile per copiare.
+  - [x] Layout: Sidebar Log fissa, Griglia a tutto schermo (no max-w).
 
 ### ⚙️ Flusso Creazione Partita
 
@@ -26,6 +30,7 @@ Leggere sempre questo file prima di iniziare un nuovo task per allinearsi con la
 - [x] **Modifica Giocatori**: Matita apre modale senza trigger selezione.
 - [x] **Evidenziazione "In Gioco"**: Bordo distintivo per giocatori attivi.
 - [x] **Refactoring Testi**: Rinominato "La tua squadra" -> "In gioco" e "Inizia" -> "Gioca". Contatore spostato.
+- [x] **Fix Drag & Drop Desktop**: Corretto passaggio props mancanti in `SetupPlayersDesktop`.
 
 ### 📱 UI Mobile & Layout
 
