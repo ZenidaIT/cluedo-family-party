@@ -35,6 +35,13 @@ Leggere sempre questo file prima di iniziare un nuovo task per allinearsi con la
 
 - [x] **Pulsante Indietro Smart**: Rispetta la provenienza (Home vs Game).
 
+### 🔒 Sicurezza & Infrastruttura
+
+- [x] **Google Cloud Security Hardening**:
+  - Limitate chiavi API (HTTP Referrer) su Console.
+  - Aggiornato `docs/SECURITY.md` con procedure operative.
+  - Verificato Budget Alert.
+
 ### 🎨 Design
 
 - [x] **Espansione Palette Colori**: 30+ colori distinti e armoniosi.

@@ -5,7 +5,6 @@ Un'applicazione web moderna per gestire le partite di Cluedo in famiglia, sostit
 ## 🚀 Funzionalità
 
 - **Progressive Web App (PWA)**
-
   - Installabile su Desktop e Mobile.
   - Funziona Offline (cache-first assets).
   - Layout adattivo:
@@ -13,18 +12,15 @@ Un'applicazione web moderna per gestire le partite di Cluedo in famiglia, sostit
     - **Mobile**: Liste ottimizzate e Editor a tutto schermo.
 
 - **Gestione Giocatori e Squadre**
-
   - Rubrica persistente per i giocatori frequenti.
   - Sincronizzazione automatica delle modifiche (nome/colore) su tutte le partite.
 
 - **Gestione Edizioni**
-
   - **Pubbliche**: Gestite dagli admin, visibili a tutti.
   - **Private**: Create e visibili solo dall'utente.
   - Personalizzazione totale di Sospettati, Armi e Luoghi.
 
 - **Griglia di Gioco Intelligente**
-
   - Niente scroll orizzontale su Mobile (fino a 5 giocatori).
   - Clicca sul nome della carta per segnarla come "Trovata".
   - Logica di deduzione assistita (Sì/No/Forse).
@@ -69,3 +65,5 @@ Vedi `docs/TODO.md` per i prossimi passi e le funzionalità in sviluppo.
 ## 📄 Documentazione
 
 Per dettagli sull'architettura e la guida utente, consulta la cartella `docs/`.
+
+> 🔒 **Sicurezza**: Vedi `docs/SECURITY.md` per le configurazioni critiche di Google Cloud (Restrizioni API e Budget).

@@ -25,7 +25,6 @@ Questa guida è pensata per nuovi sviluppatori (o agenti AI) che devono configur
     ```
 
 3.  **Configura le Variabili d'Ambiente**:
-
     - Copia il file di esempio:
       ```bash
       cp .env.example .env.local
@@ -39,10 +38,14 @@ Questa guida è pensata per nuovi sviluppatori (o agenti AI) che devono configur
     ```
 
 4.  **Avvia il Server di Sviluppo**:
+
     ```bash
     npm run dev
     ```
+
     L'app sarà accessibile su `http://localhost:5173`.
+
+    > **Nota Sicurezza**: Se riscontri errori API (es. 403), verifica che `localhost` sia autorizzato nella Google Cloud Console. Vedi `docs/SECURITY.md`.
 
 ## Comandi Disponibili
 
