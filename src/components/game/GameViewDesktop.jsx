@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Menu, RotateCcw, User, Home, Plus, Filter, Copy } from 'lucide-react';
+import { Menu, RotateCcw, User, Home, Plus, Filter, Copy, BookOpen, Settings, ChevronRight, ChevronLeft, LogOut, ZoomIn, X } from 'lucide-react';
 import Grid from './Grid';
 import LogView from './LogView';
+import Swal from 'sweetalert2';
 
 const GameViewDesktop = ({ 
     currentEdition, 
@@ -23,98 +24,141 @@ const GameViewDesktop = ({
     setFilters
 }) => {
     
-    const [menuOpen, setMenuOpen] = useState(false);
-    const menuRef = useRef(null);
+    // Default Log open on Left as per request "aprire sulla sinistra"
+    const [logOpen, setLogOpen] = useState(false);
+    
+    // Highlight State
+    const [highlightedLogId, setHighlightedLogId] = useState(null);
+    const [highlightedCards, setHighlightedCards] = useState([]);
 
-    // Click Outside Menu
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-          if (menuRef.current && !menuRef.current.contains(event.target)) {
-            setMenuOpen(false);
-          }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [menuRef]);
+    const handleLogHighlight = (id, cards) => {
+        if (highlightedLogId === id) {
+            // Toggle off
+            setHighlightedLogId(null);
+            setHighlightedCards([]);
+        } else {
+            setHighlightedLogId(id);
+            setHighlightedCards(cards);
+        }
+    };
 
     const handleCopyCode = async () => {
-        const code = window.location.pathname.split('/').pop();
+        const url = window.location.href;
         try {
-            await navigator.clipboard.writeText(code);
-            // Simple visual feedback could be added here, but for now relying on system behavior or could add a toast if we had the prop.
-            // Using a temporary alert or just console is not enough UX.
-            // Let's assume the user knows it copied if clicking.
-            // Better: Change icon momentarily? simpler: just copy.
+            await navigator.clipboard.writeText(url);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.onmouseenter = Swal.stopTimer;
+                  toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Link copiato!"
+            });
         } catch (err) {
             console.error('Failed to copy', err);
         }
     };
 
-    return (
-        <div className="h-[100dvh] flex flex-col bg-slate-100 font-sans overflow-hidden">
-             {/* HEADER */}
-             <header className="bg-slate-900 text-white px-4 py-2 shadow-md shrink-0 flex justify-between items-center z-50">
-                <div className="flex items-center gap-4">
-                    {/* Home Button */}
-                    <button onClick={onReturnHome} className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors" title="Torna al menu">
-                        <Home size={24} />
-                    </button>
-                    
-                    {/* Title & Code Group */}
-                    <div className="flex flex-col">
-                        <h1 className="font-bold text-lg leading-tight text-white select-none">
-                            {currentEdition.name}
-                        </h1>
-                        <button 
-                            onClick={handleCopyCode}
-                            className="text-xs text-slate-400 font-mono hover:text-indigo-300 transition-colors text-left flex items-center gap-1 group w-fit"
-                            title="Clicca per copiare il codice partita"
-                        >
-                            <span>#{window.location.pathname.split('/').pop()}</span>
-                            <Copy size={10} className="opacity-0 group-hover:opacity-100 transition-opacity"/>
-                        </button>
-                    </div>
-                </div>
-                
-                <div className="flex gap-4 items-center">
-                    <div className="relative" ref={menuRef}>
-                        <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 hover:bg-slate-800 rounded-full transition text-slate-300 hover:text-white">
-                            <Menu size={24}/>
-                        </button>
-                        
-                        {menuOpen && (
-                            <div className="absolute top-12 right-0 w-64 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-[60] animate-in fade-in zoom-in-95 origin-top-right text-slate-800">
-                                <button onClick={() => { setMenuOpen(false); onNewMatch(); }} className="w-full text-left px-4 py-3 hover:bg-indigo-50 text-indigo-700 font-medium flex items-center gap-3">
-                                    <RotateCcw size={18}/> Nuova Partita
-                                </button>
-                                <button onClick={() => { setMenuOpen(false); onEditPlayers(); }} className="w-full text-left px-4 py-3 hover:bg-slate-50 text-slate-700 flex items-center gap-3">
-                                    <User size={18}/> Modifica Giocatori
-                                </button>
-                                <div className="border-t my-1"></div>
-                                <button onClick={() => { setMenuOpen(false); onReturnHome(); }} className="w-full text-left px-4 py-3 hover:bg-slate-100 text-slate-800 flex items-center gap-3">
-                                    <Home size={18}/> Menu Principale
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </header>
+    const handleHomeClick = () => {
+        Swal.fire({
+            title: "Torna alla Lobby?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sì",
+            cancelButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onReturnHome();
+            }
+        });
+    };
 
-            {/* MAIN CONTENT - SPLIT VIEW */}
-            <div className="flex-1 min-h-0 flex flex-row overflow-hidden relative">
+    // Helper for Sidebar Buttons
+    const SidebarBtn = ({ icon: Icon, label, onClick, active = false, extraClass = '' }) => (
+        <button 
+            onClick={onClick}
+            className={`
+                w-full flex flex-col items-center justify-center py-4 px-1 gap-1.5 transition-all
+                text-slate-400 hover:text-white hover:bg-slate-800 relative group
+                ${active ? 'text-white bg-slate-800 shadow-[inset_4px_0_0_0_#6366f1]' : ''}
+                ${extraClass}
+            `}
+            title={label}
+        >
+            <Icon size={26} strokeWidth={1.5} className="group-hover:scale-110 transition-transform" />
+            <span className="text-[10px] font-medium tracking-wide uppercase">{label}</span>
+        </button>
+    );
+
+    return (
+        <div className="w-full h-[100dvh] flex bg-slate-100 font-sans overflow-hidden">
+             
+            {/* 1. NARROW LEFT SIDEBAR - NAVIGATION */}
+            <aside className="w-20 bg-slate-900 text-white flex flex-col justify-between shrink-0 z-50 shadow-2xl">
                 
-                {/* GRID SECTION (LEFT) - Full space now */}
-                <div className="flex-1 flex flex-col min-h-0 relative overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
-                     <Grid 
-                        gamePlayers={gamePlayers} 
-                        currentEdition={currentEdition} 
-                        gridData={gridData} 
-                        onCellClick={onCellClick} 
+                {/* Logo / Home */}
+                <div onClick={handleHomeClick} className="h-20 flex items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors border-b border-slate-800">
+                     <Home size={28} className="text-slate-300 hover:text-white transition-colors" />
+                </div>
+
+                {/* Main Actions */}
+                <nav className="flex-1 overflow-y-auto py-2">
+                    <SidebarBtn 
+                        icon={Plus} 
+                        label="Ipotesi" 
+                        onClick={() => { setEditingLogId(null); setModals({...modals, hypothesis: true}); }} 
                     />
+                    <SidebarBtn 
+                        icon={BookOpen} 
+                        label="Diario" 
+                        onClick={() => setLogOpen(!logOpen)} 
+                        active={logOpen}
+                    />
+                     <div className="h-px w-10 mx-auto bg-slate-800 my-2"></div>
+                    <SidebarBtn 
+                        icon={User} 
+                        label="Giocatori" 
+                        onClick={onEditPlayers} 
+                    />
+                     <SidebarBtn 
+                        icon={RotateCcw} 
+                        label="Reset" 
+                        onClick={onNewMatch} 
+                    />
+                </nav>
+
+                {/* Bottom Info */}
+                <div className="py-4 border-t border-slate-800 text-center">
+                    <div className="text-[9px] text-slate-600 font-mono">v3.0</div>
+                </div>
+            </aside>
+
+
+            {/* 2. LOG SIDEBAR (LEFT, EXPANDABLE) */}
+            <aside className={`
+                bg-white border-r border-slate-200 shadow-xl z-40 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col overflow-hidden
+                ${logOpen ? 'w-72 opacity-100 translate-x-0' : 'w-0 opacity-0 -translate-x-10'}
+            `}>
+                <div className="h-14 shrink-0 border-b border-slate-100 flex items-center justify-between px-4 bg-slate-50/80 backdrop-blur">
+                    <h2 className="font-bold text-slate-800 flex items-center gap-2 text-lg tracking-tight">
+                        <BookOpen size={20} className="text-indigo-600"/>
+                        Diario
+                    </h2>
+                    <button onClick={() => setLogOpen(false)} className="p-1 hover:bg-slate-200 rounded-md text-slate-400 hover:text-slate-600 transition-colors">
+                        <X size={16} />
+                    </button>
                 </div>
                 
-                {/* LOG SECTION (RIGHT) - Fixed Sidebar */}
-                <div className="w-80 xl:w-96 border-l border-slate-200 bg-white shadow-xl z-20 flex flex-col shrink-0">
+                <div className="flex-1 overflow-auto bg-slate-50/30">
                     <LogView 
                         historyLog={historyLog} 
                         filters={filters} 
@@ -122,18 +166,46 @@ const GameViewDesktop = ({
                         onEditLog={startEditLog}
                         onDeleteLog={(id) => onLogEntry(null, id, true)}
                         setModals={setModals}
+                        onHighlight={handleLogHighlight}
+                        highlightedLogId={highlightedLogId}
                     />
                 </div>
+            </aside>
 
-                {/* FLOATING ACTION BUTTON - Positioned relative to Sidebar */}
-                <button 
-                    onClick={() => { setEditingLogId(null); setModals({...modals, hypothesis: true}); }}
-                    className="fixed bottom-8 right-[21rem] xl:right-[25rem] z-[60] bg-indigo-600 text-white w-14 h-14 rounded-full shadow-xl hover:bg-indigo-700 active:scale-95 flex items-center justify-center transition-all hover:rotate-90"
-                    title="Nuova Ipotesi"
-                >
-                    <Plus size={32} />
-                </button>
-            </div>
+
+            {/* 3. MAIN CONTENT AREA */}
+            <main className="flex-1 flex flex-col h-full min-w-0 bg-slate-100 overflow-hidden">
+                
+                {/* Header */}
+                <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0 z-30">
+                    <div className="flex items-center gap-3">
+                        <h1 className="text-lg font-bold text-slate-800 tracking-tight">{currentEdition.name}</h1>
+                        <span className="text-slate-300">|</span>
+                         <button 
+                            onClick={handleCopyCode}
+                            className="flex items-center gap-2 px-3 py-1 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded text-slate-500 hover:text-indigo-700 transition-all group"
+                            title="Copia link completo"
+                        >
+                            <span className="font-mono text-xs font-medium">Codice: {window.location.pathname.split('/').pop()}</span>
+                            <Copy size={12} className="opacity-50 group-hover:opacity-100"/>
+                        </button>
+                    </div>
+                </header>
+
+                {/* Scrollable Content - ABSOLUTE FULL SCREEN */}
+                <div className="flex-1 overflow-y-auto overflow-x-hidden relative scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
+                     <div className="min-h-full p-2">
+                        <Grid 
+                            gamePlayers={gamePlayers} 
+                            currentEdition={currentEdition} 
+                            gridData={gridData} 
+                            onCellClick={onCellClick} 
+                            highlightedCards={highlightedCards}
+                        />
+                     </div>
+                </div>
+            </main>
+
         </div>
     );
 };

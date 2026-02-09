@@ -13,7 +13,8 @@ description: Regole fondamentali del progetto Cluedo Family Party per futuri age
     - **React + Vite**.
     - **Tailwind CSS** (Utility-first, design system coerente Slate/Indigo).
     - **Lucide React** (Unico set di icone).
-    - **Table-based Layout**: Per la griglia di gioco (`Grid.jsx`) usare sempre `<table>` nativa.
+    - **Layout Desktop**: Card-based grid per massima densità informativa ed estetica (`Grid.jsx` evolve in `CardGrid` concept).
+    - **Layout Mobile**: Table-based per compatibilità e spazio ridotto.
 
 3.  **Security First**
     - **Credenziali**: Mai committare chiavi API. Usare sempre `.env`.

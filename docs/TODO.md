@@ -17,6 +17,12 @@ Leggere sempre questo file prima di iniziare un nuovo task per allinearsi con la
   - [x] Header: Icona Home separata, Titolo testo semplice.
   - [x] Codice Partita: Sottotesto cliccabile per copiare.
   - [x] Layout: Sidebar Log fissa, Griglia a tutto schermo (no max-w).
+- [x] **UI Card-Based (v3)**:
+  - [x] Grid -> Card Layout: Sostituita tabella con card interattive.
+  - [x] Log Sidebar: Spostata a Sinistra con toggle.
+  - [x] Full Screen: Ottimizzazione spazi e rimozione padding inutili.
+  - [x] **Log Verticale**: Visualizzazione a triple per leggibilità.
+  - [x] **Highlighting**: Click su Log evidenzia le card corrispondenti.
 
 ### ⚙️ Flusso Creazione Partita
 
