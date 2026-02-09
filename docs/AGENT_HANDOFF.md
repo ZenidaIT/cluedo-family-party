@@ -68,6 +68,6 @@ Attualmente `GameViewMobile.jsx` è probabilmente obsoleto o non allineato con i
 - `npm run dev`: Server locale.
 - `npm run build`: Compila.
 - `firebase deploy`: Pubblica online.
-- **F5 (VS Code)**: Avvia il debug in Chrome (assicurati che il server dev sia già attivo).
+- **F5 (VS Code)**: Avvia automaticamente il server dev e apre Chrome in debug mode. Comodo!
 
 Buon lavoro! Prendi il testimone e porta il Mobile al livello del Desktop. 🚀
