@@ -320,8 +320,8 @@ const GamePage = () => {
             onLoadHistory={() => {}}
             onReturnHome={() => {
                 MySwal.fire({
-                    title: 'Tornare alla Lobby?',
-                    text: 'La partita è salvata.',
+                    title: 'Vuoi tornare alla Lobby?',
+                    text: 'La partita verrà salvata automaticamente.',
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'OK'

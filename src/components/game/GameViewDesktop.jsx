@@ -25,7 +25,16 @@ const GameViewDesktop = ({
 }) => {
     
     // Default Log open on Left as per request "aprire sulla sinistra"
-    const [logOpen, setLogOpen] = useState(false);
+    // PERSISTENCE: Check localStorage
+    const [logOpen, setLogOpen] = useState(() => {
+        const saved = localStorage.getItem('cluedo_log_sidebar');
+        return saved ? JSON.parse(saved) : false; // Default closed if no save
+    });
+
+    // Save state on change
+    useEffect(() => {
+        localStorage.setItem('cluedo_log_sidebar', JSON.stringify(logOpen));
+    }, [logOpen]);
     
     // Highlight State
     const [highlightedLogId, setHighlightedLogId] = useState(null);
@@ -66,20 +75,9 @@ const GameViewDesktop = ({
         }
     };
 
+    // FIXED: Just call the prop. The parent GamePage handles the confirmation Swal.
     const handleHomeClick = () => {
-        Swal.fire({
-            title: "Torna alla Lobby?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Sì",
-            cancelButtonText: "No"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                onReturnHome();
-            }
-        });
+        onReturnHome();
     };
 
     // Helper for Sidebar Buttons
@@ -100,18 +98,18 @@ const GameViewDesktop = ({
     );
 
     return (
-        <div className="w-full h-[100dvh] flex bg-slate-100 font-sans overflow-hidden">
+        <div className="w-full h-[100dvh] flex bg-slate-950 font-sans overflow-hidden">
              
             {/* 1. NARROW LEFT SIDEBAR - NAVIGATION */}
-            <aside className="w-20 bg-slate-900 text-white flex flex-col justify-between shrink-0 z-50 shadow-2xl">
+            <aside className="w-20 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 z-50 shadow-2xl relative">
                 
                 {/* Logo / Home */}
-                <div onClick={handleHomeClick} className="h-20 flex items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors border-b border-slate-800">
-                     <Home size={28} className="text-slate-300 hover:text-white transition-colors" />
+                <div onClick={handleHomeClick} className="h-16 flex items-center justify-center cursor-pointer hover:bg-slate-800 transition-colors border-b border-slate-800">
+                     <Home size={26} className="text-slate-400 hover:text-white transition-colors" />
                 </div>
 
                 {/* Main Actions */}
-                <nav className="flex-1 overflow-y-auto py-2">
+                <nav className="flex-1 overflow-y-auto py-4 flex flex-col gap-2">
                     <SidebarBtn 
                         icon={Plus} 
                         label="Ipotesi" 
@@ -137,28 +135,52 @@ const GameViewDesktop = ({
                 </nav>
 
                 {/* Bottom Info */}
-                <div className="py-4 border-t border-slate-800 text-center">
+                <div className="py-4 border-t border-slate-800 text-center bg-slate-900">
                     <div className="text-[9px] text-slate-600 font-mono">v3.0</div>
                 </div>
             </aside>
 
 
-            {/* 2. LOG SIDEBAR (LEFT, EXPANDABLE) */}
+            {/* 2. MAIN CONTENT AREA */}
+            <main className="flex-1 flex flex-col h-full min-w-0 bg-slate-950 overflow-hidden relative shadow-inner">
+                
+                {/* Header */}
+                <header className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 shrink-0 z-30 shadow-md">
+                    <h1 className="text-xl font-black text-white tracking-tight leading-none">{currentEdition.name}</h1>
+                    
+                    <div className="flex items-center gap-2 text-indigo-200/70 hover:text-indigo-200 transition-colors cursor-pointer group" onClick={handleCopyCode}>
+                        <span className="font-mono text-xs font-bold tracking-widest uppercase">Codice partita: {window.location.pathname.split('/').pop()}</span>
+                        <Copy size={14} className="opacity-70 group-hover:opacity-100 transition-opacity"/>
+                    </div>
+                </header>
+
+                {/* Scrollable Content - ABSOLUTE FULL SCREEN */}
+                <div className="flex-1 overflow-y-auto overflow-x-hidden relative scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+                     <div className="min-h-full p-4 md:p-6 pb-32">
+                        <Grid 
+                            gamePlayers={gamePlayers} 
+                            currentEdition={currentEdition} 
+                            gridData={gridData} 
+                            onCellClick={onCellClick} 
+                            highlightedCards={highlightedCards}
+                        />
+                     </div>
+                </div>
+            </main>
+
+            {/* 3. LOG SIDEBAR (RIGHT, EXPANDABLE) */}
             <aside className={`
-                bg-white border-r border-slate-200 shadow-xl z-40 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col overflow-hidden
-                ${logOpen ? 'w-72 opacity-100 translate-x-0' : 'w-0 opacity-0 -translate-x-10'}
+                bg-slate-900 border-l border-slate-800 shadow-2xl z-40 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col overflow-hidden
+                ${logOpen ? 'w-80 opacity-100 translate-x-0' : 'w-0 opacity-0 translate-x-10'}
             `}>
-                <div className="h-14 shrink-0 border-b border-slate-100 flex items-center justify-between px-4 bg-slate-50/80 backdrop-blur">
-                    <h2 className="font-bold text-slate-800 flex items-center gap-2 text-lg tracking-tight">
-                        <BookOpen size={20} className="text-indigo-600"/>
-                        Diario
+                <div className="h-16 shrink-0 border-b border-slate-800 flex items-center justify-center px-5 bg-slate-900 text-white shadow-sm relative">
+                    <h2 className="text-xl font-black text-slate-100 flex items-center gap-3 tracking-tight">
+                        <BookOpen size={20} className="text-white"/>
+                        Diario delle ipotesi
                     </h2>
-                    <button onClick={() => setLogOpen(false)} className="p-1 hover:bg-slate-200 rounded-md text-slate-400 hover:text-slate-600 transition-colors">
-                        <X size={16} />
-                    </button>
                 </div>
                 
-                <div className="flex-1 overflow-auto bg-slate-50/30">
+                <div className="flex-1 overflow-auto bg-slate-900 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
                     <LogView 
                         historyLog={historyLog} 
                         filters={filters} 
@@ -171,40 +193,6 @@ const GameViewDesktop = ({
                     />
                 </div>
             </aside>
-
-
-            {/* 3. MAIN CONTENT AREA */}
-            <main className="flex-1 flex flex-col h-full min-w-0 bg-slate-100 overflow-hidden">
-                
-                {/* Header */}
-                <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-4 shrink-0 z-30">
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-lg font-bold text-slate-800 tracking-tight">{currentEdition.name}</h1>
-                        <span className="text-slate-300">|</span>
-                         <button 
-                            onClick={handleCopyCode}
-                            className="flex items-center gap-2 px-3 py-1 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-200 rounded text-slate-500 hover:text-indigo-700 transition-all group"
-                            title="Copia link completo"
-                        >
-                            <span className="font-mono text-xs font-medium">Codice: {window.location.pathname.split('/').pop()}</span>
-                            <Copy size={12} className="opacity-50 group-hover:opacity-100"/>
-                        </button>
-                    </div>
-                </header>
-
-                {/* Scrollable Content - ABSOLUTE FULL SCREEN */}
-                <div className="flex-1 overflow-y-auto overflow-x-hidden relative scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent">
-                     <div className="min-h-full p-2">
-                        <Grid 
-                            gamePlayers={gamePlayers} 
-                            currentEdition={currentEdition} 
-                            gridData={gridData} 
-                            onCellClick={onCellClick} 
-                            highlightedCards={highlightedCards}
-                        />
-                     </div>
-                </div>
-            </main>
 
         </div>
     );

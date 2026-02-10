@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,17 +11,6 @@ export default defineConfig({
   },
   build: {
     emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-            if (id.includes('node_modules')) {
-                if (id.includes('firebase')) {
-                    return 'firebase';
-                }
-                return 'vendor';
-            }
-        }
-      }
-    }
-  }
-})
+    // Removed manualChunks to prevent potential React duplication/loading issues (Invalid Hook Call)
+  },
+});
