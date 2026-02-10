@@ -12,62 +12,52 @@ Non è il gioco completo, ma un "companion" che sostituisce il foglio di carta p
 
 - **Frontend**: React + Vite + Tailwind CSS.
 - **Backend**: Firebase (Firestore per dati realtime, Auth per login, Hosting).
+- **PWA**: Installabile e Offline-first.
 - **Lingua**: Il codice è in Inglese/Italiano misto, ma la **Lingua dell'Interfaccia Utente DEVE essere ITALIANO**.
-- **Regole**: Leggi **assolutamente** `docs/project_rules.md`.
 
-## 2. Mappa della Documentazione 🗺️
+### 🚨 Regole d'Oro (DA LEGGERE SUBITO)
 
 Prima di scrivere una sola riga di codice, **leggi questi file** nell'ordine:
 
 1.  `docs/project_rules.md`: **CRITICO**. Contiene le regole "Agentic" e di progetto che non devi mai violare.
 2.  `docs/TODO.md`: La roadmap. Qui trovi cosa è stato fatto e cosa c'è da fare.
 3.  `docs/DEVELOPER_GUIDE.md`: Spiega l'architettura tecnica, come fare il build/deploy e la struttura dei componenti.
-4.  `docs/ARCHITECTURE.md`: Panoramica alto livello (potrebbe essere meno aggiornato del codice, fidati del codice).
+4.  `docs/ARCHITECTURE.md`: Panoramica alto livello.
 
-## 3. Missione Corrente: UI Restyling (v3) 🎨
+## 2. Stato Attuale: v4 Complete (Desktop) 🎨
 
-Stiamo eseguendo un **totale restyling grafico** dell'applicazione per renderla professionale, pulita e "a Card" (invece che una griglia stile Excel).
+Abbiamo appena concluso un **totale restyling (v4)** della versione Desktop.
 
-### Strategia "Split Interface"
+**Cosa è stato fatto:**
 
-Abbiamo deciso di separare nettamente le interfacce per garantire la miglior UX possibile su entrambi i device.
-Invece di un'unica interfaccia responsive complessa, abbiamo due componenti root distinti caricati in `GameView.jsx`:
+- **Dark Mode First**: Tema `slate-950` con accenti pastello e superfici Material.
+- **Fluid Balanced Grid**: Nuovo motore di layout (`useBalancedColumns` in `Grid.jsx` e `ClueCard.jsx`) che bilancia matematicamente le colonne in base allo spazio e al numero di elementi.
+- **Layout Desktop**:
+  - Sidebar Navigazione (Home/Book/User) a sinistra.
+  - Sidebar Diario (Log) a **destra** (slide-in).
+  - Header semplificato ma informativo.
+- **Ottimizzazione**:
+  - `vite.config.js` con `manualChunks` per separare React, Firebase e UI (bundle < 500kB).
+  - Scrollbar custom scure (`tailwind-scrollbar`).
 
-1.  **`GameViewDesktop.jsx`** (Desktop/Tablet)
-2.  **`GameViewMobile.jsx`** (Smartphone)
+## 3. Missione Futura: Mobile UI Revamp 📱
 
-### ✅ Stato Attuale (Cosa è stato fatto)
+La versione Desktop è lucida e finita. La versione Mobile (`GameViewMobile.jsx`) è rimasta indietro alla v2/v3.
 
-Ci siamo concentrati **ESCLUSIVAMENTE SULLA VERSIONE DESKTOP**.
-La versione Desktop (v3.2.1) è **COMPLETA**.
+**Il tuo compito principale sarà:**
 
-- **File Chiave Sviluppati**:
-  - `src/components/game/GameViewDesktop.jsx` (Layout principale)
-  - `src/components/game/Grid.jsx` (Griglia adattiva)
-  - `src/components/game/ClueCard.jsx` (La nuova unità base UI)
-  - `src/components/game/LogView.jsx` (Diario laterale)
-- **Caratteristiche Desktop**:
-  - Layout a tutto schermo (Full Height/Width).
-  - Sidebar di navigazione a sinistra (Icon-only).
-  - Sidebar del Diario (Log) a comparsa sulla sinistra.
-  - Interattività: Cliccando sul Log, le card si illuminano (Highlighting).
-
-### 🚧 Cosa C'è da Fare (Il tuo compito)
-
-Il prossimo grande step è l'**IMPLEMENTAZIONE MOBILE**.
-Attualmente `GameViewMobile.jsx` è probabilmente obsoleto o non allineato con il nuovo stile v3.
-
-**Obiettivi Futuri**:
-
-1.  Portare lo stile "Card" su Mobile.
-2.  Ottimizzare per il touch.
-3.  Mantenere la coerenza visiva (colori, icone) con la versione Desktop appena conclusa.
+1.  **Analizzare `GameViewMobile.jsx`**: Capire cosa manca per allinearlo allo stile v4.
+2.  **Portare lo stile Card/Dark Mode**:
+    - Assicurarsi che le nuove `ClueCard` bilanciate funzionino bene su schermi stretti (il motore `ResizeObserver` dovrebbe già gestirlo, ma va verificato).
+    - Verificare i menu a tendina/drawer per il Mobile.
+3.  **Ottimizzazione Touch**:
+    - Tap targets appropriati.
+    - Nessuno scroll orizzontale indesiderato.
 
 ## 4. Comandi Utili 🛠️
 
-- `npm run dev`: Server locale.
-- `npm run build`: Compila.
+- `npm run dev`: Server locale (usa `http://localhost:5173`).
+- `npm run build`: Compila per produzione (usa Rollup + manualChunks).
 - `firebase deploy`: Pubblica online.
-- **F5 (VS Code)**: Avvia automaticamente il server dev e apre Chrome in debug mode. Comodo!
 
 Buon lavoro! Prendi il testimone e porta il Mobile al livello del Desktop. 🚀
