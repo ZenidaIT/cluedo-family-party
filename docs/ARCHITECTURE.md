@@ -11,7 +11,7 @@ L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo
 - **Frontend**: React (v18), Vite
 - **PWA**: `vite-plugin-pwa` (Service Worker, Manifest, Installabilità)
 - **Drag & Drop**: `@dnd-kit` (Core, Sortable, Modifiers)
-- **Stile**: Tailwind CSS (Utility-first framework)
+- **Stile**: Tailwind CSS (Utility-first framework) + `tailwind-scrollbar` plugin.
 - **Icone**: Lucide React
 - **Asset**: SVG nativi
 - **Feedback UI**: SweetAlert2 (Modali e conferme)
@@ -38,7 +38,7 @@ L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo
 
 1.  **Code Splitting**:
     - Le rotte principali (`GamePage`, `SetupEdition`, `SetupPlayers`) sono caricate in **Lazy Loading** con `React.Suspense`.
-    - **Vendor Chunking**: Le librerie pesanti (Firebase, React) sono separate in chunk dedicati (`firebase`, `vendor`) per ottimizzare il caching.
+    - **Vendor Chunking**: Configurazione manuale in `vite.config.js` per separare `firebase-vendor`, `react-vendor` e `ui-vendor`, mantenendo i bundle sotto i 500kB.
 2.  **PWA**:
     - Service Worker configurato per caching aggressivo degli asset statici.
     - Manifest per installazione come app nativa.

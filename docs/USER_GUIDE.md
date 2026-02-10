@@ -2,6 +2,10 @@
 
 Benvenuto in **Cluedo Family Party**, l'app companion per le tue partite a Cluedo, progettata per sostituire carta e penna con una griglia digitale intelligente e sicura.
 
+## Interfaccia & Dark Mode 🌑
+
+L'app si presenta con un tema **Dark Mode** elegante e riposante per gli occhi, ideale per le serate di gioco. I colori sono ottimizzati per garantire il massimo contrasto e leggibilità.
+
 ## Accesso e Inizio
 
 1.  Apri l'app e clicca **"Accedi con Google"**.
@@ -43,7 +47,7 @@ Puoi installare Cluedo Family Party come un'app nativa sul tuo telefono o comput
 
 ### Diario (Log)
 
-Usa il pulsante **(+)** in basso a destra per registrare le ipotesi fatte dagli altri giocatori.
+Usa il pulsante **(+)** o apri la barra laterale (a **destra** su Desktop, in basso su Mobile) per registrare e consultare le ipotesi.
 
 - "Chi ha chiesto?"
 - "Chi ha risposto?"

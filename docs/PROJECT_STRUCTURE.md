@@ -40,7 +40,6 @@ Componenti UI riutilizzabili e viste principali.
 - **`Lobby.jsx`**: Dashboard iniziale. Mostra le partite recenti salvate su Firestore e pulsanti per iniziare.
 - **`Login.jsx`**: Schermata di login con pulsante Google.
 - **`SetupEdition.jsx`**: Controller. Gestisce lo stato delle Edizioni e delega alle viste specifiche.
-
   - `setup-edition/`
     - **`SetupEditionDesktop.jsx`**: Split View (Lista Edizioni + Form Modifica).
     - **`SetupEditionMobile.jsx`**: Lista Edizioni (Form apre in modale/pagina a parte).
@@ -55,14 +54,18 @@ Componenti UI riutilizzabili e viste principali.
     - **`PlayerEditForm.jsx`**: Form per creare/modificare giocatori.
 - **`GameView.jsx`**: Il "tavolo da gioco". Orchestra la Griglia, il Menu e il Log.
   - Gestisce il layout responsive (Mobile vs Desktop Split View).
+  - **Sidebar Logs**: Su Desktop si apre a destra con animazione slide-in.
 
 #### Game Components (`src/components/game/`)
 
 - **`Grid.jsx`**: Il cuore dell'app.
-  - Implementa una `<table>` nativa per gestire lo scroll.
+  - Implementa una logica **Fluid Balanced** (`useBalancedColumns`) per distribuire le card simmetricamente.
   - **Mobile**: Scroll fluido orizzontale/verticale.
   - **Desktop**: Centrato e ottimizzato.
   - Gestisce i click sulle celle (Maybe -> Yes -> No).
+- **`ClueCard.jsx`**: Componente v4.
+  - Include logica `ResizeObserver` per bilanciare anche le tile dei giocatori al suo interno.
+  - Supporta visualizzazione compatta e titoli "Pastel Dark".
 - **`LogView.jsx`**: Il diario del detective.
   - Lista cronologica delle ipotesi.
   - Supporta filtri e modifiche.

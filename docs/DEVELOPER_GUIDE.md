@@ -72,11 +72,12 @@ Questa guida è pensata per nuovi sviluppatori (o agenti AI) che devono configur
   - _Mobile_: Lista e Editor separati.
 - **`GamePage.jsx`**: Il core dell'app. Gestisce lo stato della partita, la griglia e il log.
 - **`GameViewDesktop.jsx`**: Layout Desktop principale.
-  - Gestisce navigazione laterale (Sidebar sinistra).
-  - Gestisce il Log laterale (Sidebar a comparsa).
-  - Gestisce la griglia principale a tutto schermo.
-- **`Grid.jsx`**: Renderizza la griglia di Card.
-- **`ClueCard.jsx`**: Componente fondamentale v3. Mostra lo stato della carta (Soluzione) e il possesso per ogni giocatore (Pallini colorati).
+  - Gestisce navigazione laterale (Header in alto, Sidebar Log a **Destra**).
+  - Gestisce la griglia principale a tutto schermo con background scuro.
+- **`Grid.jsx`**: Renderizza la griglia di Card usando un hook custom `useBalancedColumns` per il layout fluido.
+- **`ClueCard.jsx`**: Componente fondamentale v4.
+  - `ResizeObserver` integrato per layout responsivo dei giocatori (Tile).
+  - Gestisce stati (Yes/No/Maybe) e highlight visivi.
 - **`LogView.jsx`**: Visualizza la cronologia delle ipotesi. Supporta click-to-highlight.
 
 ## Drag & Drop Implementation

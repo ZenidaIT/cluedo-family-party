@@ -55,4 +55,10 @@ Leggere sempre questo file prima di iniziare un nuovo task per allinearsi con la
 
 ### 🎨 Design
 
+- [x] **Dark Mode & UI Revamp (v4)**:
+  - [x] Tema scuro completo (Slate-950) con accenti pastello.
+  - [x] **Fluid Balanced Grid**: Logica `ResizeObserver` per bilanciare colonne card e player.
+  - [x] Header Semplificati: Rimossi stili "pillola", focus su leggibilità.
+  - [x] **Scrollbar Theming**: Scrollbar scure integrate.
+  - [x] **Sidebar Destra**: Spostato il diario sulla destra per desktop.
 - [x] **Espansione Palette Colori**: 30+ colori distinti e armoniosi.
