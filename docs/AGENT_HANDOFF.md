@@ -24,23 +24,15 @@ Prima di scrivere una sola riga di codice, **leggi questi file** nell'ordine:
 3.  `docs/DEVELOPER_GUIDE.md`: Spiega l'architettura tecnica, come fare il build/deploy e la struttura dei componenti.
 4.  `docs/ARCHITECTURE.md`: Panoramica alto livello.
 
-## 2. Stato Attuale: v4 Complete (Desktop) 🎨
+## 2. Stato Attuale: Desktop UI Refinement (WIP) 🚧
 
-Abbiamo appena concluso un **totale restyling (v4)** della versione Desktop.
+Abbiamo iniziato un lavoro di rifinitura estetica della UI Desktop (Tema Scuro/Caldo, "Warm Dark").
+**IMPORTANTE**: Il lavoro è **IN CORSO**.
 
-**Cosa è stato fatto:**
+- **Desktop**: Quasi completato. Abbiamo sistemato i colori dello sfondo (`Slate-800`), del modale (`Slate-900`, no padding) e delle selezioni (`Amber-900`).
+- **Mobile**: **NON ANCORA ALLINEATO**. Il prossimo task deve essere quello di portare le stesse rifiniture fatte sul Desktop anche sul Mobile (`SetupPlayersMobile.jsx`, `GameViewMobile.jsx`).
 
-- **Dark Mode First**: Tema `slate-950` con accenti pastello e superfici Material.
-- **Fluid Balanced Grid**: Nuovo motore di layout (`useBalancedColumns` in `Grid.jsx` e `ClueCard.jsx`) che bilancia matematicamente le colonne in base allo spazio e al numero di elementi.
-- **Layout Desktop**:
-  - Sidebar Navigazione (Home/Book/User) a sinistra.
-  - Sidebar Diario (Log) a **destra** (slide-in).
-  - Header semplificato ma informativo.
-- **Ottimizzazione**:
-  - `vite.config.js` con `manualChunks` per separare React, Firebase e UI (bundle < 500kB).
-  - Scrollbar custom scure (`tailwind-scrollbar`).
-
-## 3. Missione Futura: Mobile UI Revamp 📱
+## 3. Missione Futura: Finish & Align Mobile 📱
 
 La versione Desktop è lucida e finita. La versione Mobile (`GameViewMobile.jsx`) è rimasta indietro alla v2/v3.
 

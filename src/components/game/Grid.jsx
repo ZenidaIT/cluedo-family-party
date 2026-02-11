@@ -41,50 +41,69 @@ const useBalancedColumns = (itemCount, minItemWidth, gap) => {
     return { containerRef, cols };
 };
 
-const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick, highlightedCards = [] }) => {
-    
-    // Component for each section to scope the ResizeObserver
-    const Section = ({ title, items }) => {
-        // Min Card Width: ~260px, Gap: 16px
-        const { containerRef, cols } = useBalancedColumns(items.length, 260, 16);
-
-        return (
-            <div className="mb-12 last:mb-0">
-                {/* Section Header */}
-                <h3 className="text-2xl font-black text-indigo-300 uppercase tracking-tight text-center mb-6 drop-shadow-sm">
-                    {title}
-                </h3>
-
-                {/* Cards Grid - Dynamic Balanced Columns */}
-                <div 
-                    ref={containerRef}
-                    className="grid gap-4 w-full"
-                    style={{ 
-                        gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` 
-                    }}
-                >
-                    {items.map(item => (
-                        <div key={item} className="h-full">
-                             <ClueCard 
-                                name={item}
-                                players={gamePlayers} 
-                                gridData={gridData} 
-                                onCellClick={onCellClick} 
-                                solutionState={gridData[`${item}_SOLUTION`]}
-                                isHighlighted={highlightedCards.includes(item)}
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        );
-    };
+const Section = ({ title, items, gamePlayers, gridData, onCellClick, highlightedCards }) => {
+    // Min Card Width: ~260px, Gap: 16px
+    const { containerRef, cols } = useBalancedColumns(items.length, 260, 16);
 
     return (
+        <div className="mb-12 last:mb-0">
+            {/* Section Header */}
+            <h3 className="text-2xl font-black text-amber-300 uppercase tracking-tight text-center mb-6 drop-shadow-sm">
+                {title}
+            </h3>
+
+            {/* Cards Grid - Dynamic Balanced Columns */}
+            <div 
+                ref={containerRef}
+                className="grid gap-4 w-full"
+                style={{ 
+                    gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` 
+                }}
+            >
+                {items.map(item => (
+                    <div key={item} className="h-full">
+                            <ClueCard 
+                            name={item}
+                            players={gamePlayers} 
+                            gridData={gridData} 
+                            onCellClick={onCellClick} 
+                            solutionState={gridData[`${item}_SOLUTION`]}
+                            isHighlighted={highlightedCards.includes(item)}
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const Grid = ({ gamePlayers, currentEdition, gridData, onCellClick, highlightedCards = [] }) => {
+    return (
         <div className="pb-24">
-            <Section title="Sospettati" items={currentEdition.suspects} />
-            <Section title="Armi" items={currentEdition.weapons} />
-            <Section title="Stanze" items={currentEdition.rooms} />
+            <Section 
+                title="Sospettati" 
+                items={currentEdition.suspects}
+                gamePlayers={gamePlayers}
+                gridData={gridData}
+                onCellClick={onCellClick}
+                highlightedCards={highlightedCards}
+            />
+            <Section 
+                title="Armi" 
+                items={currentEdition.weapons} 
+                gamePlayers={gamePlayers}
+                gridData={gridData}
+                onCellClick={onCellClick}
+                highlightedCards={highlightedCards}
+            />
+            <Section 
+                title="Stanze" 
+                items={currentEdition.rooms} 
+                gamePlayers={gamePlayers}
+                gridData={gridData}
+                onCellClick={onCellClick}
+                highlightedCards={highlightedCards}
+            />
         </div>
     );
 };

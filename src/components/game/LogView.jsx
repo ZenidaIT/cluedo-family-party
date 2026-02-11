@@ -33,7 +33,7 @@ const LogView = ({ historyLog, filters, gamePlayers, onEditLog, onDeleteLog, set
                         className={`
                             rounded-lg border overflow-hidden cursor-pointer transition-all duration-200 relative group
                             ${isHighlighted 
-                                ? 'bg-indigo-900/20 border-indigo-500/50 ring-1 ring-indigo-500/50 shadow-[0_4px_20px_rgba(99,102,241,0.2)] z-10' 
+                                ? 'bg-amber-900/20 border-amber-500/50 ring-1 ring-amber-500/50 shadow-[0_4px_20px_rgba(245,158,11,0.2)] z-10' 
                                 : 'bg-slate-800 border-slate-700/80 shadow-md hover:border-slate-500 hover:shadow-lg hover:-translate-y-0.5'
                             }
                         `}
@@ -41,7 +41,7 @@ const LogView = ({ historyLog, filters, gamePlayers, onEditLog, onDeleteLog, set
                        {/* Header: People involved */}
                        <div className={`
                             flex items-center justify-between px-3 py-2 border-b text-[10px] uppercase tracking-wider
-                            ${isHighlighted ? 'bg-indigo-900/40 border-indigo-500/30' : 'bg-slate-900/50 border-slate-700'}
+                            ${isHighlighted ? 'bg-amber-900/40 border-amber-500/30' : 'bg-slate-900/50 border-slate-700'}
                        `}>
                            <div className="flex items-center gap-2">
                                <span className={`w-3 h-3 rounded-full ring-1 ring-slate-900 shadow-sm ${PLAYER_COLORS[entry.askerColorIdx].class}`}></span>
@@ -55,24 +55,21 @@ const LogView = ({ historyLog, filters, gamePlayers, onEditLog, onDeleteLog, set
                        </div>
                        
                        {/* Body: Vertical Triplets */}
-                       <div className="px-3 py-2 space-y-1.5">
-                           <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0"></span>
-                                <span className="text-xs font-bold text-slate-400 truncate">{entry.cards[0]}</span>
+                       <div className="px-1 py-1 flex flex-col gap-0.5">
+                           <div className="w-full bg-slate-900/50 border border-slate-700/50 rounded px-1.5 py-1 text-center shadow-sm">
+                               <span className="text-xs font-bold text-slate-200 block tracking-wide">{entry.cards[0]}</span>
                            </div>
-                           <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0"></span>
-                                <span className="text-xs font-bold text-slate-400 truncate">{entry.cards[1]}</span>
+                           <div className="w-full bg-slate-900/50 border border-slate-700/50 rounded px-1.5 py-1 text-center shadow-sm">
+                               <span className="text-xs font-bold text-slate-200 block tracking-wide">{entry.cards[1]}</span>
                            </div>
-                           <div className="flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"></span>
-                                <span className="text-xs font-bold text-slate-400 truncate">{entry.cards[2]}</span>
+                           <div className="w-full bg-slate-900/50 border border-slate-700/50 rounded px-1.5 py-1 text-center shadow-sm">
+                               <span className="text-xs font-bold text-slate-200 block tracking-wide">{entry.cards[2]}</span>
                            </div>
                        </div>
 
                        {/* Actions (Hover only) - Adapted for Mobile/Touch by always showing or explicit logic, but keep hover for desktop */}
                        <div className="px-2 py-1 flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/30 border-t border-slate-700/50">
-                           <button onClick={(e) => { e.stopPropagation(); onEditLog(entry); }} className="text-indigo-400 text-[10px] font-bold hover:text-indigo-300">MODIFICA</button>
+                           <button onClick={(e) => { e.stopPropagation(); onEditLog(entry); }} className="text-amber-400 text-[10px] font-bold hover:text-amber-300">MODIFICA</button>
                            <button onClick={(e) => { e.stopPropagation(); onDeleteLog(entry.id); }} className="text-red-400 text-[10px] font-bold hover:text-red-300">ELIMINA</button>
                        </div>
                    </div>

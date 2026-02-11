@@ -8,7 +8,7 @@ import MySwal from '../utils/swal';
 import SetupPlayersDesktop from './setup-players/SetupPlayersDesktop';
 import SetupPlayersMobile from './setup-players/SetupPlayersMobile';
 
-const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers = [], user, isStandalone = false, onGoHome }) => {
+const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers = [], user, isStandalone = false, onGoHome, isModalMode = false }) => {
   const [searchTerm, setSearchTerm] = useState('');
   
   // Editing State
@@ -196,11 +196,25 @@ const SetupPlayers = ({ players, setPlayers, onBack, onStartGame, savedPlayers =
       
       // Dnd / Squad mgmt
       removeFromSquad,
+      removeFromSquad,
       movePlayer
   };
 
+  if (isModalMode) {
+      return (
+          <div className="w-full h-full flex flex-col">
+              <div className="md:hidden w-full flex-1 min-h-0">
+                  <SetupPlayersMobile {...viewProps} isModalMode={true} />
+              </div>
+              <div className="hidden md:block w-full flex-1 min-h-0">
+                  <SetupPlayersDesktop {...viewProps} isModalMode={true} />
+              </div>
+          </div>
+      );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4">
         {/* Render Mobile View on small screens, Desktop on md+ */}
         {/* We use CSS display logic to keep both in DOM or we could use media query hook to mount only one. 
             Given the goal of "distinct interfaces", mounting only one is cleaner for accessible DOM, 

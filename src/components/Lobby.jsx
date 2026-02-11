@@ -54,7 +54,7 @@ const Lobby = ({ user }) => {
             title: 'Nuova Partita',
             html:
               '<div class="flex flex-col gap-3 mt-2">' +
-              '<input id="swal-sessionname" class="w-full p-3 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 text-slate-700 bg-slate-50 text-base" placeholder="Nome Partita (opzionale)">' +
+              '<input id="swal-sessionname" class="w-full p-3 border border-slate-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500 text-slate-700 bg-slate-50 text-base" placeholder="Nome Partita (opzionale)">' +
               '</div>',
             focusConfirm: false,
             showCancelButton: true,
@@ -145,12 +145,12 @@ const Lobby = ({ user }) => {
                         <img src={logo} alt="Cluedo Family Party" className="h-16 w-auto drop-shadow-sm"/>
                         <div>
                             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Cluedo Family Party</h1>
-                            <p className="text-slate-500 font-medium text-sm">Investigatore: <span className="text-indigo-600">{user.displayName}</span></p>
+                            <p className="text-slate-500 font-medium text-sm">Investigatore: <span className="text-amber-600">{user.displayName}</span></p>
                         </div>
                     </div>
 
                     <div className="flex gap-3">
-                        <button onClick={() => navigate('/players')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm border border-slate-200">
+                        <button onClick={() => navigate('/players')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 hover:text-amber-600 transition shadow-sm border border-slate-200">
                             <User size={20}/> Rubrica
                         </button>
                         <button onClick={() => navigate('/editions')} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-slate-700 font-bold hover:bg-slate-50 hover:text-amber-600 transition shadow-sm border border-slate-200">
@@ -171,7 +171,7 @@ const Lobby = ({ user }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-8">
                     
                     {/* NEW GAME CARD */}
-                    <button onClick={handleCreateSession} className="group bg-slate-900 hover:bg-slate-800 text-white rounded-2xl p-6 cursor-pointer transition-all shadow-lg hover:shadow-xl flex flex-col items-center justify-center gap-4 min-h-[160px] border-2 border-transparent hover:border-indigo-500/50">
+                    <button onClick={handleCreateSession} className="group bg-slate-900 hover:bg-slate-800 text-white rounded-2xl p-6 cursor-pointer transition-all shadow-lg hover:shadow-xl flex flex-col items-center justify-center gap-4 min-h-[160px] border-2 border-transparent hover:border-amber-500/50">
                         <div className="bg-white/10 group-hover:bg-white/20 p-4 rounded-full transition-colors">
                             <Plus size={32}/>
                         </div>
@@ -181,10 +181,10 @@ const Lobby = ({ user }) => {
                     {/* SESSION CARDS */}
                     {sessions.map(s => (
                         <div key={s.id} onClick={() => handleJoinSession(s)}
-                            className="group bg-white hover:bg-indigo-50/30 border border-slate-200 hover:border-indigo-500 rounded-2xl p-5 cursor-pointer transition-all shadow-sm hover:shadow-md flex flex-col justify-between min-h-[160px] relative overflow-hidden">
+                            className="group bg-white hover:bg-amber-50/30 border border-slate-200 hover:border-amber-500 rounded-2xl p-5 cursor-pointer transition-all shadow-sm hover:shadow-md flex flex-col justify-between min-h-[160px] relative overflow-hidden">
                             
                             <div className="flex justify-between items-start">
-                                <div className="bg-slate-100 text-slate-500 p-3 rounded-xl group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                                <div className="bg-slate-100 text-slate-500 p-3 rounded-xl group-hover:bg-amber-100 group-hover:text-amber-600 transition-colors">
                                     <Play size={24} fill="currentColor"/>
                                 </div>
                                 <button onClick={(e) => handleDeleteSession(e, s.id)} 

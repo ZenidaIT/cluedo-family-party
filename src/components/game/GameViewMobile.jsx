@@ -70,7 +70,7 @@ const GameViewMobile = ({
                                 <button onClick={() => { setMenuOpen(false); onNewMatch(); }} className="w-full text-left px-4 py-3 hover:bg-indigo-50 text-indigo-700 font-medium flex items-center gap-3">
                                     <RotateCcw size={18}/> Nuova Partita
                                 </button>
-                                <button onClick={() => { setMenuOpen(false); onEditPlayers(); }} className="w-full text-left px-4 py-3 hover:bg-slate-50 text-slate-700 flex items-center gap-3">
+                                <button onClick={() => { setMenuOpen(false); setModals({...modals, players: true}); }} className="w-full text-left px-4 py-3 hover:bg-slate-50 text-slate-700 flex items-center gap-3">
                                     <User size={18}/> Modifica Giocatori
                                 </button>
                                 <div className="border-t my-1"></div>

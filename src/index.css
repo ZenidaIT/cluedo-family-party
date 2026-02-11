@@ -1,37 +1,37 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 @layer base {
-  /* Global Dark Scrollbar */
+  /* Global Dark Scrollbar (Warm Stone Theme) */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0f172a; /* slate-900 */
+    background: #0c0a09; /* stone-950 */
   }
   ::-webkit-scrollbar-thumb {
-    background: #334155; /* slate-700 */
+    background: #44403c; /* stone-700 */
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #475569; /* slate-600 */
+    background: #57534e; /* stone-600 */
   }
 
   /* Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #334155 #0f172a;
+    scrollbar-color: #44403c #0c0a09;
   }
 }
 
 body {
-  background-color: #0f172a; /* slate-900 */
-  color: #f8fafc; /* slate-50 */
+  background-color: #0c0a09; /* stone-950 */
+  color: #fafaf9; /* stone-50 */
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar for inner containers */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -40,9 +40,9 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
+  background-color: #a8a29e; /* stone-400 */
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8;
+  background-color: #78716c; /* stone-500 */
 }

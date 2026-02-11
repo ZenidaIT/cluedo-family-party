@@ -12,6 +12,13 @@ const ClueCard = ({
     isHighlighted = false
 }) => {
     
+    // Placeholder Generic Icon (Material Style)
+    const GenericIcon = () => (
+        <div className="w-6 h-6 rounded bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-400 shrink-0 shadow-sm">
+             <Shield size={12} />
+        </div>
+    );
+
     // --- BALANCED COLUMNS LOGIC ---
     const gridRef = useRef(null);
     const [cols, setCols] = useState(2); // Start safe
@@ -61,25 +68,25 @@ const ClueCard = ({
             case CELL_STATES.YES: 
             case CELL_STATES.SOLVED:
                 return { 
-                    border: 'border-green-500/50', 
-                    headerBg: 'bg-green-500/20', 
-                    text: 'text-green-200',
-                    // Green Circle with Check
+                    border: 'border-emerald-500/50', 
+                    headerBg: 'bg-emerald-500/20', 
+                    text: 'text-slate-200',
+                    // Emerald Circle with Check
                     icon: (
-                        <div className="w-5 h-5 rounded-full bg-green-500/20 border border-green-400/50 flex items-center justify-center shadow-sm">
-                            <Check size={12} className="text-green-200" strokeWidth={3} />
+                        <div className="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/50 flex items-center justify-center shadow-sm">
+                            <Check size={12} className="text-emerald-200" strokeWidth={3} />
                         </div>
                     )
                 };
             case CELL_STATES.NO: 
                 return { 
-                    border: 'border-red-500/50', 
-                    headerBg: 'bg-red-500/20',
-                    text: 'text-red-200',
-                    // Red Circle with X
+                    border: 'border-rose-500/50', 
+                    headerBg: 'bg-rose-500/20',
+                    text: 'text-slate-200',
+                    // Rose Circle with X
                     icon: (
-                        <div className="w-5 h-5 rounded-full bg-red-500/20 border border-red-400/50 flex items-center justify-center shadow-sm">
-                            <X size={12} className="text-red-200" strokeWidth={3} />
+                        <div className="w-5 h-5 rounded-full bg-rose-500/20 border border-rose-400/50 flex items-center justify-center shadow-sm">
+                            <X size={12} className="text-rose-200" strokeWidth={3} />
                         </div>
                     )
                 };
@@ -87,7 +94,7 @@ const ClueCard = ({
                 return { 
                     border: 'border-amber-500/50', 
                     headerBg: 'bg-amber-500/20',
-                    text: 'text-amber-200',
+                    text: 'text-slate-200',
                     // Custom Circle with '?' Text
                     icon: (
                         <div className="w-5 h-5 rounded-full bg-amber-500/20 border border-amber-400/50 flex items-center justify-center shadow-sm">
@@ -100,7 +107,7 @@ const ClueCard = ({
                 return { 
                     border: 'border-slate-700', 
                     headerBg: 'bg-slate-700/30', 
-                    text: 'text-slate-300',
+                    text: 'text-slate-200',
                     icon: (
                         <div className="w-5 h-5 rounded-full bg-slate-700/50 border border-slate-600 flex items-center justify-center">
                         </div>
@@ -113,8 +120,8 @@ const ClueCard = ({
     // Compact: Smaller icons but readable
     const getPlayerStatusIcon = (state) => {
         switch(state) {
-            case CELL_STATES.YES: return <Check size={16} className="text-green-400" strokeWidth={3} />;
-            case CELL_STATES.NO: return <X size={16} className="text-red-400" strokeWidth={3} />; 
+            case CELL_STATES.YES: return <Check size={16} className="text-emerald-400" strokeWidth={3} />;
+            case CELL_STATES.NO: return <X size={16} className="text-rose-400" strokeWidth={3} />; 
             case CELL_STATES.MAYBE: return <span className="text-base font-black text-amber-400 leading-none">?</span>;
             default: return null;
         }
@@ -123,8 +130,8 @@ const ClueCard = ({
     // Tile Styles (Background & Border) - Matching Header Logic
     const getPlayerTileClass = (state) => {
         switch(state) {
-            case CELL_STATES.YES: return 'bg-green-500/20 border-green-500/50 hover:bg-green-500/30';
-            case CELL_STATES.NO: return 'bg-red-500/20 border-red-500/50 hover:bg-red-500/30'; 
+            case CELL_STATES.YES: return 'bg-emerald-500/20 border-emerald-500/50 hover:bg-emerald-500/30';
+            case CELL_STATES.NO: return 'bg-rose-500/20 border-rose-500/50 hover:bg-rose-500/30'; 
             case CELL_STATES.MAYBE: return 'bg-amber-500/20 border-amber-500/50 hover:bg-amber-500/30';
             default: return 'bg-slate-700/30 border-slate-700 hover:bg-slate-700/50 hover:border-slate-500';
         }
@@ -132,28 +139,17 @@ const ClueCard = ({
 
     // Text Colors for Players
     const getPlayerTextClass = (state) => {
-        switch(state) {
-            case CELL_STATES.YES: return 'text-green-200';
-            case CELL_STATES.NO: return 'text-red-200'; 
-            case CELL_STATES.MAYBE: return 'text-amber-200';
-            default: return 'text-slate-400 group-hover:text-slate-200';
-        }
+        // Always neutral text, state is shown via bg/border/icon
+        return 'text-slate-300 group-hover:text-slate-200';
     };
 
     const style = getCardStatusStyle(solutionState);
     
-    // Placeholder Generic Icon (Material Style)
-    const GenericIcon = ({ type }) => (
-        <div className="w-6 h-6 rounded bg-slate-700 border border-slate-600 flex items-center justify-center text-slate-400 shrink-0 shadow-sm">
-             <Shield size={12} />
-        </div>
-    );
-
     return (
         <div className={`
             relative flex flex-col border rounded-lg overflow-hidden shadow-md transition-all duration-200 h-full
             ${style.border} bg-slate-800
-            ${isHighlighted ? 'ring-2 ring-indigo-500 shadow-indigo-500/30 z-10 scale-[1.02]' : 'hover:shadow-lg hover:border-slate-500'}
+            ${isHighlighted ? 'ring-2 ring-stone-100 border-stone-100 shadow-[0_0_15px_rgba(255,255,255,0.2)] z-10 scale-[1.02]' : 'hover:shadow-lg hover:border-slate-500'}
         `}>
             
             {/* Header: Compact, Pastel Tint */}

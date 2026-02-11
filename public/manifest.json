@@ -4,8 +4,8 @@
   "description": "Companion App per Cluedo - Griglia Digitale Condivisa",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f1f5f9",
-  "theme_color": "#0f172a",
+  "background_color": "#fafaf9",
+  "theme_color": "#0c0a09",
   "orientation": "any",
   "icons": [
     {

@@ -293,6 +293,9 @@ const GamePage = () => {
             historyLog={historyLog}
             onCellClick={handleCellClick}
             onLogEntry={handleLogEntry}
+            setGamePlayers={setGamePlayers}
+            savedPlayers={savedPlayers}
+            user={user}
             onNewMatch={() => {
                 MySwal.fire({
                     title: 'Nuova Partita?',

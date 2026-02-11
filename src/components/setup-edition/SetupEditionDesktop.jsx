@@ -47,7 +47,7 @@ const SetupEditionDesktop = ({
                 <div className="flex items-center gap-3">
                     {onBack && <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-full transition text-slate-500"><ArrowLeft size={20}/></button>}
                     <h2 className="font-bold text-lg text-slate-800 flex items-center gap-2">
-                        <Book size={20} className="text-indigo-500"/> Edizioni
+                        <Book size={20} className="text-amber-600"/> Edizioni
                     </h2>
                 </div>
                 <button onClick={startCreate} className="bg-slate-900 text-white p-2 rounded-lg hover:bg-slate-700 transition" title="Nuova Edizione">
@@ -56,7 +56,7 @@ const SetupEditionDesktop = ({
             </div>
 
             <div className="flex-1 overflow-y-auto p-3 space-y-3">
-                 {isAdmin && <div className="text-center text-[10px] font-mono bg-indigo-100 text-indigo-800 p-1 rounded uppercase tracking-wider">Admin Mode</div>}
+                 {isAdmin && <div className="text-center text-[10px] font-mono bg-amber-100 text-amber-800 p-1 rounded uppercase tracking-wider">Admin Mode</div>}
                  
                  {allEditions.length === 0 && (
                     <div className="text-center py-10 text-slate-400">
@@ -73,7 +73,7 @@ const SetupEditionDesktop = ({
                         <div key={ed.id} 
                             onClick={(e) => isSelectionMode ? onSelectEdition(ed) : startEdit(e, ed)}
                             className={`relative rounded-2xl border transition group cursor-pointer flex flex-col gap-3 overflow-hidden
-                                ${isActive ? 'bg-white border-indigo-500 shadow-md ring-1 ring-indigo-500' : 'bg-white border-slate-200 hover:border-indigo-400 hover:shadow-lg hover:-translate-y-1'}
+                                ${isActive ? 'bg-white border-amber-500 shadow-md ring-1 ring-amber-500' : 'bg-white border-slate-200 hover:border-amber-400 hover:shadow-lg hover:-translate-y-1'}
                             `}
                         >
                             {/* Green Header for Public Editions */}
@@ -86,7 +86,7 @@ const SetupEditionDesktop = ({
                             
                             <div className="p-5 flex flex-col gap-3 h-full">
                                 <div className="flex items-start justify-between">
-                                    <h3 className={`font-bold text-lg leading-tight ${isActive ? 'text-indigo-700' : 'text-slate-800'}`}>{ed.name}</h3>
+                                    <h3 className={`font-bold text-lg leading-tight ${isActive ? 'text-amber-700' : 'text-slate-800'}`}>{ed.name}</h3>
                                     {!ed.isPublic && <Lock size={14} className="text-slate-300"/>}
                                 </div>
                                 

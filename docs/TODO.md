@@ -5,6 +5,11 @@ Leggere sempre questo file prima di iniziare un nuovo task per allinearsi con la
 
 ## 🚧 In Corso
 
+- [ ] **Refining Desktop UI/UX (Warm Dark Theme)**:
+  - [x] Switch to Slate/Stone/Amber palette.
+  - [x] Player Editor Modal refinement (Dark Mode, No Padding).
+  - [ ] **Pending**: Final polish on Desktop, then replicate on Mobile.
+
 ## 📅 Pianificati (Next Up)
 
 - [ ] **Ottimizzazione Mobile**: Touch targets e UX.
