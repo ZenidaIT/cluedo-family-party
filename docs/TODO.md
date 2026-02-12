@@ -5,14 +5,18 @@ Leggere sempre questo file prima di iniziare un nuovo task per allinearsi con la
 
 ## 🚧 In Corso
 
-- [ ] **Refining Desktop UI/UX (Warm Dark Theme)**:
-  - [x] Switch to Slate/Stone/Amber palette.
-  - [x] Player Editor Modal refinement (Dark Mode, No Padding).
-  - [ ] **Pending**: Final polish on Desktop, then replicate on Mobile.
+- [ ] **Restyling Desktop UI/UX & Theme Engine**:
+  - [ ] **Architecture**: Implementare `ThemeContext` e struttura `src/themes/`.
+  - [ ] **Refactoring**: Sostituire colori hardcoded con CSS Variables (`--bg-primary`, `--text-main`...).
+  - [ ] **Tema "Warm Dark"**: Porting del tema attuale nel nuovo sistema.
+  - [ ] **Tema "Fantasy"**:
+    - [ ] Generazione Asset (Pelle, Pergamena, Macchie).
+    - [ ] Implementazione 9-Slice Scaling per bordi irregolari.
+  - [ ] **Griglia di Gioco**: Completamento redesign card e layout.
 
 ## 📅 Pianificati (Next Up)
 
-- [ ] **Ottimizzazione Mobile**: Touch targets e UX.
+- [ ] **Allineamento Mobile**: Portare lo stile Desktop su Mobile (solo dopo aver finito Desktop).
 
 ## ✅ Completati
 

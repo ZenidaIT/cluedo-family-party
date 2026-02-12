@@ -10,6 +10,7 @@ L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo
 
 - **Frontend**: React (v18), Vite
 - **PWA**: `vite-plugin-pwa` (Service Worker, Manifest, Installabilità)
+- **Theming**: **Theme Engine Modulare** basato su CSS Variables e `data-theme`. Supporta temi Flat (Warm Dark) e Skeuomorphic (Fantasy).
 - **Drag & Drop**: `@dnd-kit` (Core, Sortable, Modifiers)
 - **Stile**: Tailwind CSS (Utility-first framework) + `tailwind-scrollbar` plugin.
 - **Icone**: Lucide React
@@ -39,7 +40,10 @@ L'applicazione è progettata per essere **Mobile-First**, con un layout adattivo
 1.  **Code Splitting**:
     - Le rotte principali (`GamePage`, `SetupEdition`, `SetupPlayers`) sono caricate in **Lazy Loading** con `React.Suspense`.
     - **Vendor Chunking**: Configurazione manuale in `vite.config.js` per separare `firebase-vendor`, `react-vendor` e `ui-vendor`, mantenendo i bundle sotto i 500kB.
-2.  **PWA**:
+2.  **Theme Engine**:
+    - **Asset Loading**: Le texture pesanti (es. pelle, pergamena) sono caricate solo se il tema "Fantasy" è attivo.
+    - **CSS Layers**: Uso di `border-image` e `mask-image` per effetti complessi senza impattare il DOM.
+3.  **PWA**:
     - Service Worker configurato per caching aggressivo degli asset statici.
     - Manifest per installazione come app nativa.
 

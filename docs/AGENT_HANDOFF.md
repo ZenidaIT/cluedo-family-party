@@ -24,17 +24,20 @@ Prima di scrivere una sola riga di codice, **leggi questi file** nell'ordine:
 3.  `docs/DEVELOPER_GUIDE.md`: Spiega l'architettura tecnica, come fare il build/deploy e la struttura dei componenti.
 4.  `docs/ARCHITECTURE.md`: Panoramica alto livello.
 
-## 2. Stato Attuale: Desktop UI Refinement (WIP) 🚧
+## 2. Stato Attuale: Completamento Restyling Desktop 🚧
 
-Abbiamo iniziato un lavoro di rifinitura estetica della UI Desktop (Tema Scuro/Caldo, "Warm Dark").
-**IMPORTANTE**: Il lavoro è **IN CORSO**.
+Il focus attuale è il **COMPLETAMENTO del restyling grafico Desktop** (Warm Dark Theme).
+La versione Desktop **NON È ANCORA TERMINATA**.
 
-- **Desktop**: Quasi completato. Abbiamo sistemato i colori dello sfondo (`Slate-800`), del modale (`Slate-900`, no padding) e delle selezioni (`Amber-900`).
-- **Mobile**: **NON ANCORA ALLINEATO**. Il prossimo task deve essere quello di portare le stesse rifiniture fatte sul Desktop anche sul Mobile (`SetupPlayersMobile.jsx`, `GameViewMobile.jsx`).
+- **Priorità Assoluta**: Finire la UI Desktop, iniziando dalla **Griglia di Gioco**.
+- **Successivamente**: Procedere con le altre schermate Desktop (Lobby, Setup).
+- **Mobile**: Messo in pausa. Sarà allineato solo una volta che il Desktop sarà perfetto.
 
-## 3. Missione Futura: Finish & Align Mobile 📱
+## 3. Missione Futura: Finish Desktop First 🖥️
 
-La versione Desktop è lucida e finita. La versione Mobile (`GameViewMobile.jsx`) è rimasta indietro alla v2/v3.
+1.  **Griglia di Gioco**: Perfezionare `GameViewDesktop.jsx` e `Grid.jsx`.
+2.  **Coerenza**: Assicurarsi che tutto il Desktop usi il nuovo design system.
+3.  **Solo dopo**: Portare tutto su Mobile.
 
 **Il tuo compito principale sarà:**
 
